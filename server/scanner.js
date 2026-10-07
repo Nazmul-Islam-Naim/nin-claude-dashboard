@@ -48,3 +48,23 @@ export function scanSessions({ root = path.join(os.homedir(), '.claude', 'projec
   });
   return { activeMinutes, projects };
 }
+
+// All .jsonl files per normalised project path, incl. sub-folders and sidechain-only files (insights).
+export function filesByProject(root = path.join(os.homedir(), '.claude', 'projects')) {
+  const map = new Map();
+  for (const file of walk(root)) {
+    let text;
+    try { text = fs.readFileSync(file, 'utf8'); } catch { continue; }
+    for (const line of text.split('\n')) {
+      let o;
+      try { o = JSON.parse(line); } catch { continue; }
+      if (o && typeof o === 'object' && o.cwd) {
+        const p = norm(o.cwd);
+        if (!map.has(p)) map.set(p, []);
+        map.get(p).push(file);
+        break;
+      }
+    }
+  }
+  return map;
+}

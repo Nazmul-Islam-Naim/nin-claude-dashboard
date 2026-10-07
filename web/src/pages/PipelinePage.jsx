@@ -16,15 +16,15 @@ export default function PipelinePage() {
         <h1 className="text-2xl font-bold">Pipeline</h1>
         <ProjectSelect projects={projects.data?.projects} value={project} onChange={setProject} />
       </div>
-      {n > 0 && <p className="mb-4 text-xs text-muted">{n}টা project-এর Sheet পড়া যায়নি বা যুক্ত নেই</p>}
+      {n > 0 && <p className="mb-4 text-xs text-muted">{n}টা project-এর Sheet পড়া যায়নি বা যুক্ত নেই (এগুলোর অবস্থা Projects পাতায়)</p>}
       <Async
         res={board}
         isEmpty={(d) => STATUSES.every((s) => !d[s]?.length)}
         empty="কোনো requirement নেই"
-        skeleton={<Skeleton n={4} className="h-40" />}
+        skeleton={<Skeleton n={5} className="h-40" />}
       >
         {(d) => (
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-5">
             {STATUSES.map((s) => <PipelineColumn key={s} status={s} rows={d[s] || []} />)}
           </div>
         )}

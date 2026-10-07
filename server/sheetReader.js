@@ -45,15 +45,15 @@ export async function readRequirements(projectPath, { keyPath = process.env.GOOG
   let url = '';
   try { url = fs.readFileSync(path.join(projectPath, 'docs', 'specs', 'prd-tracking-sheet.txt'), 'utf8').trim(); } catch {}
   if (!url) return { status: 'no-sheet', rows: [] };
-  const id = url.match(/\/spreadsheets\/d\/([\w-]+)/)?.[1];
+  const id = url.startsWith('https://docs.google.com/spreadsheets/') ? url.match(/\/spreadsheets\/d\/([\w-]+)/)?.[1] : undefined;
   if (!id) return { status: 'error', rows: [], error: 'invalid Sheet URL' };
   const hit = sheetCache.get(id);
-  if (hit && now - hit.at < ttlMs) return hit.result;
+  if (hit && now - hit.at < ttlMs) return { ...hit.result, sheetUrl: url };
   try {
     const result = { status: 'ok', rows: await fetchRows(id, keyPath, now) };
     sheetCache.set(id, { at: now, result });
-    return result;
+    return { ...result, sheetUrl: url };
   } catch (e) {
-    return { status: 'error', rows: [], error: e instanceof ReadError ? e.message : 'network or parse error' };
+    return { status: 'error', rows: [], error: e instanceof ReadError ? e.message : 'network or parse error', sheetUrl: url };
   }
 }

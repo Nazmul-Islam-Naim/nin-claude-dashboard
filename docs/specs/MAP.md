@@ -9,3 +9,10 @@
 | 007 | Project detail page | instructions/007-project-detail.md | specs/007-project-detail.md | creates | 2026-10-05 · built |
 | 008 | Live feed tab | instructions/008-live-feed.md | specs/008-live-feed.md | creates | 2026-10-05 · built |
 | 009 | Pipeline tab | instructions/009-pipeline.md | specs/009-pipeline.md | creates | 2026-10-05 · built |
+| 010 | Spec reader (Built status from MAP and spec files) | instructions/010-spec-reader.md | specs/010-spec-reader.md | creates | 2026-10-07 · built |
+| 011 | Built status and MAP fallback in API and UI | instructions/011-built-status.md | specs/003-aggregator-api.md, specs/006-projects-page.md, specs/007-project-detail.md, specs/009-pipeline.md | updates | 2026-10-07 · built |
+| 012 | Sheet link on project card and detail page | instructions/012-sheet-link.md | specs/002-sheet-reader.md, specs/003-aggregator-api.md, specs/006-projects-page.md, specs/007-project-detail.md | updates | 2026-10-07 · built |
+| 013 | Open a project in VS Code from its card | instructions/013-open-in-editor.md | specs/013-open-in-editor.md | creates | 2026-10-07 · built |
+| 014 | View the dashboard from the same network | instructions/014-lan-access.md | specs/014-lan-access.md | creates | 2026-10-07 · built |
+| 015 | Project insights (models, plugins, skills) | instructions/015-insights.md | specs/015-insights.md | creates | 2026-10-07 · built |
+| 016 | Project detail page redesign (wide layout, requirement cards) | instructions/016-detail-redesign.md | specs/005-ui-shell.md, specs/007-project-detail.md, specs/015-insights.md | updates | 2026-10-07 · built |

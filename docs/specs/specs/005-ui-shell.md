@@ -45,7 +45,7 @@ Every page needs the same look, navigation, refresh behaviour and failure displa
 
 **Routing**: `useHashRoute()` reads `location.hash` and returns `{ tab, project }`. `#/projects`, `#/feed`, `#/pipeline`, `#/projects/<name>`. Unknown hash resolves to `projects`.
 
-**Layout**: `<header>` with the app name and `<nav>` tabs (the active one has `aria-current="page"` and an indigo underline), then `<main>` with max-width 1080px and a 16px gutter. On narrow screens the tab row scrolls horizontally.
+**Layout**: `<header>` with the app name and `<nav>` tabs (the active one has `aria-current="page"` and an indigo underline), then `<main>` with max-width 1600px and a 16px gutter (32px from 640px up) (instruction 016). On narrow screens the tab row scrolls horizontally.
 
 **useApi(url)**: fetches on mount and every 5 seconds, returns `{ data, loading, error }`. `loading` is true only until the first response. A failed poll sets `error` but keeps the last `data`. Polling pauses while `document.hidden` and resumes with an immediate fetch when visible. Cleans up its timer on unmount or URL change.
 
@@ -72,3 +72,7 @@ Every page needs the same look, navigation, refresh behaviour and failure displa
 ## Open questions
 
 None.
+
+## Change log
+
+- 2026-10-07 (instruction 016): the content container is 1600px wide (was 1080px) for all pages.

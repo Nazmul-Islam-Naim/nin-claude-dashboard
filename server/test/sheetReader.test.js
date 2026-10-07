@@ -91,3 +91,24 @@ test('blank rows dropped, short row padded', async () => {
   assert.equal(r.rows[0].status, '');
   assert.equal(r.rows[1].spec, '');
 });
+
+test('non-Google or javascript URLs are invalid, no sheetUrl', async () => {
+  mockFetch([]);
+  for (const u of ['javascript:alert(1)', 'https://evil.com/spreadsheets/d/abc/edit', 'https://docs.google.com/spreadsheets/']) {
+    const r = await readRequirements(project('x', u), opts());
+    assert.equal(r.status, 'error');
+    assert.equal(r.error, 'invalid Sheet URL');
+    assert.equal('sheetUrl' in r, false);
+  }
+});
+
+test('sheetUrl on ok and on 403 error, none on no-sheet', async () => {
+  mockFetch([HEADER]);
+  const url = 'https://docs.google.com/spreadsheets/d/s9/edit';
+  assert.equal((await readRequirements(project('s9', `  ${url}\n`), opts())).sheetUrl, url);
+  mockFetch([], 403);
+  const e = await readRequirements(project('s10'), opts());
+  assert.equal(e.status, 'error');
+  assert.equal(e.sheetUrl, 'https://docs.google.com/spreadsheets/d/s10/edit');
+  assert.equal('sheetUrl' in (await readRequirements(project('x', null), opts())), false);
+});
