@@ -1,0 +1,27 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Direction 1 — Mission Control</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0f14;--panel:#121923;--line:#1f2a37;--fg:#d6e1ee;--muted:#7d8da1;--primary:#2ee59d;--accent:#f5b83d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px Inter,sans-serif;display:flex;min-height:100vh}
+aside{width:200px;background:var(--panel);border-right:1px solid var(--line);padding:20px 14px;font-family:'JetBrains Mono',monospace}
+aside b{color:var(--primary);display:block;margin-bottom:24px}aside a{display:block;padding:8px 10px;color:var(--muted);border-radius:4px}aside a.on{background:#0f2a22;color:var(--primary)}
+main{flex:1;padding:24px}h1{font:600 18px 'JetBrains Mono',monospace;margin:0 0 16px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.kpi{background:var(--panel);border:1px solid var(--line);padding:12px 14px;border-radius:4px}.kpi small{color:var(--muted);font-family:'JetBrains Mono',monospace}.kpi div{font:600 26px 'JetBrains Mono',monospace;color:var(--primary)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px}
+.card h3{margin:0 0 6px;font:600 14px 'JetBrains Mono',monospace;display:flex;justify-content:space-between}
+.badge{font-size:11px;padding:2px 6px;border-radius:3px;background:#0f2a22;color:var(--primary)}.badge.idle{background:#2a2412;color:var(--accent)}
+.meta{color:var(--muted);font-size:12px;margin-bottom:10px}.bar{height:5px;background:var(--line);border-radius:2px}.bar i{display:block;height:100%;background:var(--primary);border-radius:2px}
+.req{font:12px 'JetBrains Mono',monospace;color:var(--muted);margin-top:6px}
+</style></head><body>
+<aside><b>▌NIN//DASH</b><a class="on">Projects</a><a>Live feed</a><a>Pipeline</a></aside>
+<main><h1>Projects</h1>
+<div class="kpis"><div class="kpi"><small>ACTIVE</small><div>3</div></div><div class="kpi"><small>SESSIONS TODAY</small><div>14</div></div><div class="kpi"><small>OPEN REQ</small><div>9</div></div></div>
+<div class="grid">
+<div class="card"><h3>nin-dashboard<span class="badge">ACTIVE</span></h3><div class="meta">শেষ session: ২ মিনিট আগে · ৮ sessions</div><div class="bar"><i style="width:75%"></i></div><div class="req">3/4 Confirmed</div></div>
+<div class="card"><h3>shop-api<span class="badge idle">IDLE</span></h3><div class="meta">শেষ session: ২ দিন আগে · ১২ sessions</div><div class="bar"><i style="width:20%"></i></div><div class="req">1/5 Confirmed</div></div>
+<div class="card"><h3>mobile-app<span class="badge">ACTIVE</span></h3><div class="meta">শেষ session: ১৫ মিনিট আগে · ৫ sessions</div><div class="bar"><i style="width:60%"></i></div><div class="req">3/5 Spec Written</div></div>
+<div class="card"><h3>hr-portal<span class="badge">ACTIVE</span></h3><div class="meta">শেষ session: ৪০ মিনিট আগে · ৩ sessions</div><div class="bar"><i style="width:40%"></i></div><div class="req">2/5 Confirmed</div></div>
+</div></main></body></html>

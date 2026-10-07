@@ -1,0 +1,27 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Direction 3 — Warm Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf6ee;--panel:#fffdf8;--line:#eadfce;--fg:#2b2118;--muted:#8a7a68;--primary:#c8553d;--accent:#3f7d5c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px 'DM Sans',sans-serif;display:flex;min-height:100vh}
+aside{width:220px;padding:28px 20px;border-right:1px solid var(--line)}
+aside b{font:700 20px Fraunces,serif;display:block;margin-bottom:28px;color:var(--primary)}aside a{display:block;padding:10px 14px;border-radius:99px;color:var(--muted);font-weight:500;margin-bottom:4px}aside a.on{background:var(--primary);color:#fff}
+main{flex:1;padding:36px 40px}h1{font:700 32px Fraunces,serif;margin:0 0 6px}.sub{color:var(--muted);margin-bottom:24px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.kpi{background:var(--panel);border:1px solid var(--line);padding:18px 20px;border-radius:20px}.kpi small{color:var(--muted)}.kpi div{font:700 34px Fraunces,serif;color:var(--primary)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px}
+.card h3{margin:0 0 6px;font:700 19px Fraunces,serif;display:flex;justify-content:space-between;align-items:center}
+.badge{font:700 11px 'DM Sans';padding:4px 10px;border-radius:99px;background:#dcefe4;color:var(--accent)}.badge.idle{background:#f1e7d6;color:var(--muted)}
+.meta{color:var(--muted);margin-bottom:16px}.bar{height:10px;background:#f1e7d6;border-radius:99px}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.req{color:var(--muted);font-size:13px;margin-top:8px}
+</style></head><body>
+<aside><b>Nin Studio</b><a class="on">Projects</a><a>Live feed</a><a>Pipeline</a></aside>
+<main><h1>আপনার Projects</h1><div class="sub">এখন কী কী নিয়ে কাজ চলছে</div>
+<div class="kpis"><div class="kpi"><small>Active projects</small><div>3</div></div><div class="kpi"><small>আজকের sessions</small><div>14</div></div><div class="kpi"><small>Open requirements</small><div>9</div></div></div>
+<div class="grid">
+<div class="card"><h3>nin-dashboard<span class="badge">ACTIVE</span></h3><div class="meta">শেষ session ২ মিনিট আগে · ৮ sessions</div><div class="bar"><i style="width:75%"></i></div><div class="req">3/4 Confirmed</div></div>
+<div class="card"><h3>shop-api<span class="badge idle">IDLE</span></h3><div class="meta">শেষ session ২ দিন আগে · ১২ sessions</div><div class="bar"><i style="width:20%"></i></div><div class="req">1/5 Confirmed</div></div>
+<div class="card"><h3>mobile-app<span class="badge">ACTIVE</span></h3><div class="meta">শেষ session ১৫ মিনিট আগে · ৫ sessions</div><div class="bar"><i style="width:60%"></i></div><div class="req">3/5 Spec Written</div></div>
+<div class="card"><h3>hr-portal<span class="badge">ACTIVE</span></h3><div class="meta">শেষ session ৪০ মিনিট আগে · ৩ sessions</div><div class="bar"><i style="width:40%"></i></div><div class="req">2/5 Confirmed</div></div>
+</div></main></body></html>

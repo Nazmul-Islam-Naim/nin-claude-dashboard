@@ -1,0 +1,27 @@
+<!doctype html><html lang="bn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Direction 2 — Clean Console</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f7fb;--panel:#fff;--line:#e5e8f0;--fg:#161b2e;--muted:#6b7490;--primary:#4f46e5;--accent:#10b981}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px Inter,sans-serif}
+nav{background:var(--panel);border-bottom:1px solid var(--line);padding:0 32px;display:flex;gap:28px;align-items:center;height:56px}
+nav b{font-weight:700;margin-right:12px}nav a{color:var(--muted);height:56px;display:flex;align-items:center;font-weight:500}nav a.on{color:var(--primary);border-bottom:2px solid var(--primary)}
+main{max-width:1080px;margin:0 auto;padding:32px}h1{font-size:24px;margin:0 0 20px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.kpi{background:var(--panel);border:1px solid var(--line);padding:20px;border-radius:12px;box-shadow:0 1px 2px rgba(20,27,60,.04)}.kpi small{color:var(--muted)}.kpi div{font-size:32px;font-weight:700;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;box-shadow:0 1px 2px rgba(20,27,60,.04)}
+.card h3{margin:0 0 4px;font-size:16px;display:flex;justify-content:space-between;align-items:center}
+.badge{font-size:12px;padding:3px 10px;border-radius:99px;background:#d1fae5;color:#047857;font-weight:600}.badge.idle{background:#eef0f6;color:var(--muted)}
+.meta{color:var(--muted);margin-bottom:16px}.bar{height:8px;background:#eceefa;border-radius:99px}.bar i{display:block;height:100%;background:var(--primary);border-radius:99px}
+.req{color:var(--muted);font-size:13px;margin-top:8px}
+</style></head><body>
+<nav><b>Nin Dashboard</b><a class="on">Projects</a><a>Live feed</a><a>Pipeline</a></nav>
+<main><h1>Projects</h1>
+<div class="kpis"><div class="kpi"><small>Active projects</small><div>3</div></div><div class="kpi"><small>Sessions today</small><div>14</div></div><div class="kpi"><small>Open requirements</small><div>9</div></div></div>
+<div class="grid">
+<div class="card"><h3>nin-dashboard<span class="badge">Active</span></h3><div class="meta">শেষ session ২ মিনিট আগে · ৮ sessions</div><div class="bar"><i style="width:75%"></i></div><div class="req">3/4 Confirmed</div></div>
+<div class="card"><h3>shop-api<span class="badge idle">Idle</span></h3><div class="meta">শেষ session ২ দিন আগে · ১২ sessions</div><div class="bar"><i style="width:20%"></i></div><div class="req">1/5 Confirmed</div></div>
+<div class="card"><h3>mobile-app<span class="badge">Active</span></h3><div class="meta">শেষ session ১৫ মিনিট আগে · ৫ sessions</div><div class="bar"><i style="width:60%"></i></div><div class="req">3/5 Spec Written</div></div>
+<div class="card"><h3>hr-portal<span class="badge">Active</span></h3><div class="meta">শেষ session ৪০ মিনিট আগে · ৩ sessions</div><div class="bar"><i style="width:40%"></i></div><div class="req">2/5 Confirmed</div></div>
+</div></main></body></html>
