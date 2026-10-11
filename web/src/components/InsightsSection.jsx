@@ -3,7 +3,7 @@ import { useApi } from '../hooks/useApi.js'
 import { Skeleton, EmptyState, ErrorNote } from './States.jsx'
 import { barWidth, fmtPercent, fmtTokens, insightsUrl } from '../lib.js'
 
-const RANGES = [['', 'সব সময়'], ['30', 'শেষ ৩০ দিন'], ['7', 'শেষ ৭ দিন']]
+const RANGES = [['', 'All time'], ['30', 'Last 30 days'], ['7', 'Last 7 days']]
 
 const SHOW = 5
 
@@ -34,7 +34,7 @@ function Block({ title, children }) {
       {!all && children.length > SHOW && (
         <button type="button" onClick={() => setAll(true)}
           className="mt-2 rounded-lg px-2 py-1 text-sm font-medium text-primary hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
-          সব দেখান ({children.length})
+          Show all ({children.length})
         </button>
       )}
     </div>
@@ -48,14 +48,14 @@ export default function InsightsSection({ name }) {
     <section className="mt-8">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-lg font-semibold">Insights</h2>
-        <select aria-label="সময়সীমা" value={days} onChange={(e) => setDays(e.target.value)}
+        <select aria-label="Time range" value={days} onChange={(e) => setDays(e.target.value)}
           className="rounded-lg border border-line bg-panel px-2 py-1 text-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
           {RANGES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
         </select>
       </div>
       {loading && !data ? <Skeleton n={2} className="h-20" />
         : !data ? <ErrorNote message={error} />
-        : data.status === 'none' || !data.totals?.responses ? <EmptyState message="এখনো কোনো তথ্য নেই" />
+        : data.status === 'none' || !data.totals?.responses ? <EmptyState message="No data yet" />
         : (
           <>
             {error && <div className="mb-3"><ErrorNote message={error} /></div>}
@@ -67,7 +67,7 @@ export default function InsightsSection({ name }) {
             </Block>
             <Block title="Plugins">
               {data.plugins.map((p) => (
-                <Row key={p.plugin ?? '_none'} name={p.plugin ?? 'plugin ছাড়া'} row={p} tone="bg-success" />
+                <Row key={p.plugin ?? '_none'} name={p.plugin ?? 'No plugin'} row={p} tone="bg-success" />
               ))}
             </Block>
             <Block title="Skills">

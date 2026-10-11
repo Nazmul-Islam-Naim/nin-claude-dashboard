@@ -7,13 +7,13 @@ const Icon = ({ d }) => (
 )
 
 export default function OpenButton({ project, className = '', run = false, title }) {
-  const text = run ? 'Server চালু করুন' : 'VS Code-এ খুলুন'
-  const short = run ? 'Server চালু' : 'VS Code'
+  const text = run ? 'Start server' : 'Open in VS Code'
+  const short = run ? 'Start server' : 'VS Code'
   const [st, setSt] = useState({ s: 'idle' })
   const alive = useRef(true)
   useEffect(() => () => { alive.current = false }, [])
   const set = (v) => alive.current && setSt(v)
-  const label = { idle: short, opening: 'খুলছে…', opened: run ? 'চালু ✓' : 'খোলা ✓', error: short }[st.s]
+  const label = { idle: short, opening: 'Opening…', opened: run ? 'Started ✓' : 'Opened ✓', error: short }[st.s]
   const look = run
     ? 'bg-primary text-white hover:opacity-90'
     : 'border border-line bg-panel text-primary hover:border-primary'

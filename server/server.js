@@ -31,22 +31,22 @@ export function createApp({ root = process.env.CLAUDE_PROJECTS_DIR || path.join(
   const lastOpen = new Map();
   app.post(['/api/open', '/api/run'], (req, res, next) => {
     const origin = req.headers.origin, port = req.socket.localPort;
-    if (!isLocal(req)) return res.status(403).json({ ok: false, error: 'শুধু এই machine থেকে' });
-    if (origin && origin !== `http://127.0.0.1:${port}` && origin !== `http://localhost:${port}`) return res.status(403).json({ ok: false, error: 'অনুমতি নেই' });
-    if (!req.is('application/json')) return res.status(415).json({ ok: false, error: 'JSON লাগবে' });
+    if (!isLocal(req)) return res.status(403).json({ ok: false, error: 'Only from this machine' });
+    if (origin && origin !== `http://127.0.0.1:${port}` && origin !== `http://localhost:${port}`) return res.status(403).json({ ok: false, error: 'Not allowed' });
+    if (!req.is('application/json')) return res.status(415).json({ ok: false, error: 'JSON required' });
     next();
   }, express.json({ limit: '1kb' }), async (req, res) => {
     try {
       const name = req.body && req.body.project;
       const p = typeof name === 'string' && scan().projects.find((x) => x.path.split('/').pop() === name);
-      if (!p) return res.status(404).json({ ok: false, error: 'project পাওয়া যায়নি' });
-      if (Date.now() - (lastOpen.get(req.path + name) || 0) < 2000) return res.status(429).json({ ok: false, error: 'একটু পরে চেষ্টা করুন' });
+      if (!p) return res.status(404).json({ ok: false, error: 'Project not found' });
+      if (Date.now() - (lastOpen.get(req.path + name) || 0) < 2000) return res.status(429).json({ ok: false, error: 'Try again shortly' });
       lastOpen.set(req.path + name, Date.now());
       const r = req.path === '/api/run' ? await runProject({ path: p.path, spawner }) : await openProject({ path: p.path, spawner });
       res.status(r.ok ? 200 : 500).json(r);
     } catch (e) { res.status(500).json({ ok: false, error: String(e.message || e).slice(0, 200) }); }
   });
-  app.use((err, req, res, next) => res.status(err.status || 500).json({ ok: false, error: 'অবৈধ অনুরোধ' }));
+  app.use((err, req, res, next) => res.status(err.status || 500).json({ ok: false, error: 'Invalid request' }));
   app.get('/api/feed', wrap((req) => feed(aggregate(scan()).projects, req.query.project)));
   app.get('/api/pipeline', wrap(async (req) => pipeline((await full()).projects, req.query.project)));
   app.get('/api/insights', wrap((req) => {
@@ -54,17 +54,17 @@ export function createApp({ root = process.env.CLAUDE_PROJECTS_DIR || path.join(
     const p = typeof name === 'string' && scan().projects.find((x) => x.path.split('/').pop() === name);
     return p ? readInsights(p.path, { root, days, now }) : readInsights('', { root, days, now });
   }));
-  const dist = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web', 'dist');
+  const dist = process.env.WEB_DIST || path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'web', 'dist');
   if (fs.existsSync(dist)) app.use(express.static(dist));
   return app;
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const port = Number(process.env.PORT) || 4000;
+  const port = Number(process.env.PORT) || 47615;
   const host = process.env.HOST || '127.0.0.1';
   const token = process.env.DASHBOARD_TOKEN;
   if (!['127.0.0.1', '::1', 'localhost'].includes(host) && (!token || token.length < 16)) {
-    console.error(`HOST=${host} network-এ খোলা, তাই DASHBOARD_TOKEN (কমপক্ষে ১৬ অক্ষর) লাগবে। server/.env-এ দিন, অথবা HOST বাদ দিন।`);
+    console.error(`HOST=${host} is exposed on the network, so DASHBOARD_TOKEN (at least 16 characters) is required. Set it in server/.env, or remove HOST.`);
     process.exit(1);
   }
   createApp().listen(port, host, () => {

@@ -45,7 +45,7 @@ readInsights(projectPath, { root, days, now })
 
 - `totals.responses` is the record count, `totals.outputTokens` the sum of `outputTokens`.
 - `models`: grouped by model, sorted by `responses` descending.
-- `plugins`: grouped by plugin including `null` (shown as "plugin ছাড়া"), sorted descending.
+- `plugins`: grouped by plugin including `null` (shown as "No plugin"), sorted descending.
 - `skills`: records with a `skill`, grouped by skill (its `plugin` as above), top 10 by `responses`.
 - `percent = responses / totals.responses * 100`, one decimal; `0` when there are no responses.
 
@@ -83,9 +83,10 @@ None.
 ## Change log
 
 - 2026-10-07 (instruction 016): Insights layout redesigned as three cards side by side with collapsed rows (see "Redesign" below); data and endpoint unchanged.
+- 2026-10-11 (spec 017): UI text is English only.
 
 ## Redesign (instruction 016)
 
-The three blocks become three cards (Models, Plugins, Skills) in a grid: one column on small screens, three from 1024px. Each card has a title and rows. A row has the name (with the plugin in muted text for skills) and the percent on one line, the bar under it, and a small count line (responses, plus output tokens for models). Each card shows 5 rows, with "সব দেখান (N)" when it has more. The range select stays at the top right of the section. The data, the endpoint and the states (Skeleton, EmptyState, ErrorNote) do not change. Percent text always accompanies the bar.
+The three blocks become three cards (Models, Plugins, Skills) in a grid: one column on small screens, three from 1024px. Each card has a title and rows. A row has the name (with the plugin in muted text for skills) and the percent on one line, the bar under it, and a small count line (responses, plus output tokens for models). Each card shows 5 rows, with "Show all (N)" when it has more. The range select stays at the top right of the section. The data, the endpoint and the states (Skeleton, EmptyState, ErrorNote) do not change. Percent text always accompanies the bar.
 
-Acceptance: at 1280px the three cards sit side by side and at 360px they stack with no horizontal scroll; a card with more than 5 rows shows 5 and a "সব দেখান (N)" control that reveals the rest; every bar has its percent as text.
+Acceptance: at 1280px the three cards sit side by side and at 360px they stack with no horizontal scroll; a card with more than 5 rows shows 5 and a "Show all (N)" control that reveals the rest; every bar has its percent as text.

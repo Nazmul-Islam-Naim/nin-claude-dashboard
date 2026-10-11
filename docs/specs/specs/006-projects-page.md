@@ -30,22 +30,22 @@ Answer "which projects are under development right now and how far along are the
 
 **Layout** (inside the 005 `Layout`)
 
-1. Row of four `KpiCard`: Active projects, Sessions today, Open requirements, Built (`kpis.built` / `kpis.totalRequirements`). Under the row a muted hint: "Active = শেষ {activeMinutes} মিনিট".
+1. Row of four `KpiCard`: Active projects, Sessions today, Open requirements, Built (`kpis.built` / `kpis.totalRequirements`). Under the row a muted hint: "Active = last {activeMinutes} min".
 2. `FilterBar`: All / Active / Idle, each with a count, `aria-pressed` on the selected one. Filtering is done in the page on `projects[].active`.
 3. Grid of `ProjectCard` (`display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))`).
 
 **ProjectCard** (instruction 012): the project name is the main `<a href="#/projects/<name>">` with a stretched click area (`after:absolute after:inset-0` on a `relative` card), so the whole card still opens the detail page without nesting links. It contains:
 
 - Name and a badge reading "Active" or "Idle".
-- Line: `শেষ session {relative} · {sessions} sessions`, relative time from `Intl.RelativeTimeFormat('bn', { numeric: 'auto' })`.
+- Line: `Last session {relative} · {sessions} sessions`, relative time from `Intl.RelativeTimeFormat('en', { numeric: 'auto' })`.
 - When `requirements.sheetUrl` is present (also when the Sheet failed to read), a small text link "Sheet ↗" beside the requirement block, above the stretched link (`relative z-10`), with `href = sheetUrl`, `target="_blank"`, `rel="noopener noreferrer"`. No link without `sheetUrl`.
 - Requirement block from `requirements`:
-  - `status === 'ok'` and `total > 0`: a main line "Development: B/T Built" (`B = counts.Built`, `T = total = sum(counts) - counts.Rejected`), a stacked bar (Built green, Spec Written indigo, Confirmed and Extracted grey), and a text line such as "মোট ৮ · Built ৪ · Spec Written ৩ · Confirmed ১ · Extracted ০". `Rejected` is shown as a separate "Rejected N" only when above zero and is not part of the total. If `source === 'map'` the card shows a small grey label "MAP থেকে" and the text line lists only Built and Spec Written.
-  - `status === 'ok'` and `total === 0`: the text "কোনো requirement নেই".
-  - `status === 'no-sheet'`: "Sheet বা MAP নেই".
-  - `status === 'error'`: "Sheet পড়া যায়নি".
+  - `status === 'ok'` and `total > 0`: a main line "Development: B/T Built" (`B = counts.Built`, `T = total = sum(counts) - counts.Rejected`), a stacked bar (Built green, Spec Written indigo, Confirmed and Extracted grey), and a text line such as "মোট ৮ · Built ৪ · Spec Written ৩ · Confirmed ১ · Extracted ০". `Rejected` is shown as a separate "Rejected N" only when above zero and is not part of the total. If `source === 'map'` the card shows a small grey label "from MAP" and the text line lists only Built and Spec Written.
+  - `status === 'ok'` and `total === 0`: the text "No requirements".
+  - `status === 'no-sheet'`: "No Sheet or MAP".
+  - `status === 'error'`: "Could not read Sheet".
 
-**States**: first load shows `Skeleton` cards; `error` with no data shows `ErrorNote`; no projects shows `EmptyState` "কোনো project পাওয়া যায়নি"; a filter with no matches shows `EmptyState` "এই filter-এ কোনো project নেই".
+**States**: first load shows `Skeleton` cards; `error` with no data shows `ErrorNote`; no projects shows `EmptyState` "কোনো Project not found"; a filter with no matches shows `EmptyState` "No projects match this filter".
 
 **Components**: `ProjectsPage.jsx`, `KpiCard.jsx`, `FilterBar.jsx`, `ProjectCard.jsx`, plus a small pure helper `progress(requirements)` that returns `{ done, total }`.
 
@@ -54,7 +54,7 @@ Answer "which projects are under development right now and how far along are the
 1. `progress` returns `done = Built`, `total = all − Rejected`; counts of `{ Extracted: 1, Confirmed: 1, 'Spec Written': 2, Built: 2, Rejected: 1 }` give `2/6`.
 2. A card with `no-sheet` or `error` shows the matching text and still shows its session line.
 3. The four KPI values render from `kpis` (Built shows `built/totalRequirements`), and the hint shows the API's `activeMinutes`.
-3a. A card with `source: 'map'` shows the "MAP থেকে" label and lists only Built and Spec Written; a card with `Rejected` above zero shows it apart from the total.
+3a. A card with `source: 'map'` shows the "from MAP" label and lists only Built and Spec Written; a card with `Rejected` above zero shows it apart from the total.
 4. The Active filter shows only active projects; the count beside each filter matches the number shown.
 5. A card's link points to `#/projects/<name>` and can be opened with the keyboard.
 5a. With `sheetUrl` the card shows "Sheet ↗" opening the Sheet in a new tab with `rel="noopener noreferrer"`, without opening the detail page; without `sheetUrl` no such link exists; the markup has no `<a>` inside an `<a>`; the link and the name are separate tab stops.
@@ -75,4 +75,5 @@ None.
 ## Change log
 
 - 2026-10-07 (instruction 012): added the "Sheet ↗" link and restructured the card link as a stretched name link.
-- 2026-10-07 (instruction 011): requirement block now centres on Built (main line, stacked bar, count text); added the "MAP থেকে" source label; `progress()` now counts `Built`; fourth KPI card "Built"; `no-sheet` text is "Sheet বা MAP নেই".
+- 2026-10-07 (instruction 011): requirement block now centres on Built (main line, stacked bar, count text); added the "from MAP" source label; `progress()` now counts `Built`; fourth KPI card "Built"; `no-sheet` text is "No Sheet or MAP".
+- 2026-10-11 (spec 017): UI text is English only.

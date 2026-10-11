@@ -19,7 +19,7 @@ export default function ProjectDetailPage({ name }) {
     <Async res={res} isEmpty={() => false}>
       {(data) => {
         const p = findProject(data, name)
-        if (!p) return <EmptyState message="project পাওয়া যায়নি"><p className="mt-3"><Back /></p></EmptyState>
+        if (!p) return <EmptyState message="Project not found"><p className="mt-3"><Back /></p></EmptyState>
         const msg = reqMessage(p.requirements)
         return (
           <>

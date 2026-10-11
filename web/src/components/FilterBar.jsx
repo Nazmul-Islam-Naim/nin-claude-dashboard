@@ -1,4 +1,4 @@
-export const SORTS = [['recent', 'সর্বশেষ activity'], ['name', 'নাম (A–Z)'], ['sessions', 'বেশি session'], ['progress', 'বেশি অগ্রগতি']]
+export const SORTS = [['recent', 'Latest activity'], ['name', 'Name (A–Z)'], ['sessions', 'Most sessions'], ['progress', 'Most progress']]
 
 export default function FilterBar({ value, onChange, counts, query, onQuery, sort, onSort }) {
   return (
@@ -20,8 +20,8 @@ export default function FilterBar({ value, onChange, counts, query, onQuery, sor
         type="search"
         value={query}
         onChange={(e) => onQuery(e.target.value)}
-        placeholder="Project খুঁজুন…"
-        aria-label="Project খুঁজুন"
+        placeholder="Search projects…"
+        aria-label="Search projects"
         className="ml-auto w-full rounded-lg border border-line bg-panel px-3 py-1.5 text-sm sm:w-56"
       />
       <select value={sort} onChange={(e) => onSort(e.target.value)} aria-label="Sort" className="rounded-lg border border-line bg-panel px-2 py-1.5 text-sm">

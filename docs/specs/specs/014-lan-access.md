@@ -36,7 +36,7 @@ The dashboard only answers on `127.0.0.1`, so it cannot be seen from a phone or 
 1. Peer is loopback: allow, no token needed.
 2. Cookie `dash_auth` equals `sha256(token)` (hex, compared with `crypto.timingSafeEqual`): allow.
 3. Query `key` equals the token (timing-safe): set `dash_auth=sha256(token)` as `HttpOnly; SameSite=Strict; Path=/; Max-Age=2592000`, then redirect (302) to the same URL without `key`.
-4. Otherwise: for paths starting with `/api/` respond 401 `{ "error": "token needed" }`; for everything else respond 401 with a short HTML page in Bangla: "এই dashboard-এ ঢুকতে token লাগে। ঠিকানার শেষে ?key=<আপনার token> যোগ করুন।"
+4. Otherwise: for paths starting with `/api/` respond 401 `{ "error": "token needed" }`; for everything else respond 401 with a short HTML page in English: "A token is required to open this dashboard. Add ?key=<your token> to the end of the address."
 
 The check takes `isLocal(req)` as an injected function (default: peer address), so tests can simulate a remote peer.
 
@@ -62,3 +62,7 @@ To view from another device: set `HOST=0.0.0.0` and a `DASHBOARD_TOKEN` of 16 or
 ## Open questions
 
 None.
+
+## Change log
+
+- 2026-10-11 (spec 017): UI text is English only.

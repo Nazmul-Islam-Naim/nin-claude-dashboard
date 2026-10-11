@@ -29,22 +29,22 @@ From the dashboard the user can see which projects are active but must switch to
 
 **openProject({ path, command, platform })** -> `{ ok: true }` or `{ ok: false, error }`
 
-1. `command` defaults to `process.env.EDITOR_COMMAND || 'code'` and must match `/^[A-Za-z0-9._-]+$/`; otherwise error "অবৈধ editor কমান্ড".
-2. `path` must be absolute, exist and be a directory (`fs.statSync`), and must not contain `& | < > ^ % ! "` or a line break; otherwise error "folder পাওয়া যায়নি" or "অবৈধ পথ".
+1. `command` defaults to `process.env.EDITOR_COMMAND || 'code'` and must match `/^[A-Za-z0-9._-]+$/`; otherwise error "Invalid editor command".
+2. `path` must be absolute, exist and be a directory (`fs.statSync`), and must not contain `& | < > ^ % ! "` or a line break; otherwise error "Folder not found" or "Invalid path".
 3. Windows: `spawn('cmd.exe', ['/d', '/s', '/c', command, '"' + path + '"'], { windowsVerbatimArguments: true, detached: true, stdio: 'ignore', windowsHide: true })`. Other systems: `spawn(command, [path], { detached: true, stdio: 'ignore' })`.
-4. Wait for the child's `error` (command missing, error "`<command>` কমান্ড পাওয়া যায়নি") or `exit` event for up to 3 seconds. Exit code 0 or a timeout counts as success; a non-zero exit is the same "কমান্ড পাওয়া যায়নি" error. Then `child.unref()`.
+4. Wait for the child's `error` (command missing, error "`<command>` command not found") or `exit` event for up to 3 seconds. Exit code 0 or a timeout counts as success; a non-zero exit is the same "command not found" error. Then `child.unref()`.
 
 **POST /api/open**
 
 - Request: `Content-Type: application/json`, body `{ "project": "<name>" }`.
-- Checks, in order: peer address is `127.0.0.1`, `::1` or `::ffff:127.0.0.1` (else 403 `{ ok: false, error: "শুধু এই machine থেকে" }`); if an `Origin` header exists it equals `http://127.0.0.1:<port>` or `http://localhost:<port>` (else 403); content type is JSON (else 415); `project` is a string matching a name from the current scan (else 404, first match wins when names repeat); at most one open per project every 2 seconds (else 429).
+- Checks, in order: peer address is `127.0.0.1`, `::1` or `::ffff:127.0.0.1` (else 403 `{ ok: false, error: "Only from this machine" }`); if an `Origin` header exists it equals `http://127.0.0.1:<port>` or `http://localhost:<port>` (else 403); content type is JSON (else 415); `project` is a string matching a name from the current scan (else 404, first match wins when names repeat); at most one open per project every 2 seconds (else 429).
 - Success: 200 `{ ok: true }`. Failure from `openProject`: 500 `{ ok: false, error }`.
 
 **canOpen**: `/api/projects` returns a top-level `canOpen` that is true when the request's peer is loopback, false otherwise.
 
 **Web**
 
-- `OpenButton({ project })` (text button "VS Code-এ খুলুন") posts `{ project }` to `/api/open`. States: idle, "খুলছে…" (disabled), "খোলা হয়েছে" (2 s, then idle), error text from the response (`error`), shown in place of the label for 4 s.
+- `OpenButton({ project })` (text button "Open in VS Code") posts `{ project }` to `/api/open`. States: idle, "Opening…" (disabled), "Opened" (2 s, then idle), error text from the response (`error`), shown in place of the label for 4 s.
 - Placed beside the "Sheet ↗" link on `ProjectCard` (`relative z-10`, own tab stop) and in the `ProjectDetailPage` header. Rendered only when `canOpen` is true. It is a `<button>`, not a link.
 
 **Components**: `server/openProject.js`, a small change in `server.js`, `web/src/components/OpenButton.jsx`.
@@ -55,10 +55,10 @@ Server tests inject a fake spawner and a temp-directory project:
 
 1. A valid project name and an existing folder run the command once with the folder as its only path argument, and return `{ ok: true }`.
 2. A request body with a `path` field is ignored; only `project` is used. An unknown project returns 404.
-3. A folder containing any of `& | < > ^ % ! "` is rejected without running anything; a missing folder gives "folder পাওয়া যায়নি".
+3. A folder containing any of `& | < > ^ % ! "` is rejected without running anything; a missing folder gives "Folder not found".
 4. A peer address that is not loopback gets 403; a foreign `Origin` gets 403; a non-JSON content type gets 415.
 5. `EDITOR_COMMAND` values with spaces, slashes or shell characters are rejected.
-6. A spawn `error` (command missing) returns 500 with the "কমান্ড পাওয়া যায়নি" text; a timeout without an event counts as success.
+6. A spawn `error` (command missing) returns 500 with the "command not found" text; a timeout without an event counts as success.
 7. Two opens of the same project within 2 seconds: the second returns 429.
 8. `canOpen` is true for a loopback request and false for any other peer.
 
@@ -71,3 +71,7 @@ Requires the `code` command on PATH (VS Code: "Shell Command: Install 'code' com
 ## Open questions
 
 None.
+
+## Change log
+
+- 2026-10-11 (spec 017): UI text is English only.

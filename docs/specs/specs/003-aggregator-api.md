@@ -82,3 +82,4 @@ None.
 - 2026-10-07 (instructions 013, 014): `/api/projects` gains `canOpen`; the server gains `POST /api/open` (spec 013) and the `HOST` / `DASHBOARD_TOKEN` handling (spec 014).
 - 2026-10-07 (instruction 012): passes `requirements.sheetUrl` through to the API.
 - 2026-10-07 (instruction 011): added the `Built` status, `requirements.source`, the MAP fallback through `readSpecs` (spec 010), new KPIs (`built`, `totalRequirements`) and the new `openRequirements` definition.
+- 2026-10-11 (instruction 019): default `PORT` is now `47615` (was `4000`).

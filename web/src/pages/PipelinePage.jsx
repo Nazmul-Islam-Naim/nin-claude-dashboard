@@ -16,11 +16,11 @@ export default function PipelinePage() {
         <h1 className="text-2xl font-bold">Pipeline</h1>
         <ProjectSelect projects={projects.data?.projects} value={project} onChange={setProject} />
       </div>
-      {n > 0 && <p className="mb-4 text-xs text-muted">{n}টা project-এর Sheet পড়া যায়নি বা যুক্ত নেই (এগুলোর অবস্থা Projects পাতায়)</p>}
+      {n > 0 && <p className="mb-4 text-xs text-muted">{n} project(s) have no readable Sheet (see the Projects page for details)</p>}
       <Async
         res={board}
         isEmpty={(d) => STATUSES.every((s) => !d[s]?.length)}
-        empty="কোনো requirement নেই"
+        empty="No requirements"
         skeleton={<Skeleton n={5} className="h-40" />}
       >
         {(d) => (

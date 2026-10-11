@@ -2,7 +2,7 @@ import { ActiveBadge } from './Badge.jsx'
 import { fullDate, isActive, projectHref, relTime } from '../lib.js'
 
 export default function FeedItem({ item, activeMinutes }) {
-  const title = item.title || '(শিরোনাম নেই)'
+  const title = item.title || '(untitled)'
   return (
     <li className="flex items-center gap-3 border-b border-line px-4 py-3 last:border-0">
       <a href={projectHref(item.project)} className="shrink-0 font-semibold text-primary">{item.project}</a>

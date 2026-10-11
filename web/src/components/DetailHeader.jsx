@@ -11,7 +11,7 @@ export default function DetailHeader({ p, canOpen }) {
         <div className="min-w-0">
           <h1 className="flex flex-wrap items-center gap-3 break-words text-2xl font-bold">{p.name} <ActiveBadge active={p.active} /></h1>
           <p className="mt-1 break-all font-mono text-sm text-muted">{p.path}</p>
-          <p className="mt-1 text-sm text-muted">শেষ session {relTime(p.lastActivity)} · {p.sessions} sessions</p>
+          <p className="mt-1 text-sm text-muted">Last session {relTime(p.lastActivity)} · {p.sessions} sessions</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {sheet && (

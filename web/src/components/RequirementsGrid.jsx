@@ -46,11 +46,11 @@ export default function RequirementsGrid({ rows }) {
             </button>
           ))}
         </div>
-        <input type="search" aria-label="Requirement খুঁজুন (id বা title)" placeholder="id বা title খুঁজুন"
+        <input type="search" aria-label="Search requirements (id or title)" placeholder="Search by id or title"
           value={query} onChange={(e) => { setQuery(e.target.value); reset() }}
           className={`w-full rounded-lg border border-line bg-panel px-3 py-1.5 text-sm sm:ml-auto sm:w-64 ${focus}`} />
       </div>
-      {!shown.length ? <p className="text-muted">কোনো requirement মেলেনি</p> : (
+      {!shown.length ? <p className="text-muted">No requirements match</p> : (
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 min-[1440px]:grid-cols-4">
           {items.map((r, i) => <Card key={r.id + i} r={r} />)}
         </ul>
@@ -59,7 +59,7 @@ export default function RequirementsGrid({ rows }) {
         <div className="mt-4 text-center">
           <button type="button" onClick={() => setLimit(limit + PAGE)}
             className={`rounded-lg border border-line bg-panel px-4 py-1.5 text-sm font-medium text-primary hover:border-primary ${focus}`}>
-            আরও দেখান ({rest} বাকি)
+            Show more ({rest} left)
           </button>
         </div>
       )}

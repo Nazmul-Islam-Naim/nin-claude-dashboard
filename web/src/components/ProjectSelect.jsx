@@ -13,7 +13,7 @@ export default function ProjectSelect({ projects, value, onChange }) {
       onChange={(e) => onChange(e.target.value)}
       className="rounded-lg border border-line bg-panel px-3 py-2"
     >
-      <option value="">সব project</option>
+      <option value="">All projects</option>
       {names?.map((n) => <option key={n} value={n}>{n}</option>)}
     </select>
   )

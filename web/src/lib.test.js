@@ -9,7 +9,7 @@ describe('lib', () => {
   })
   it('url builders encode names', () => {
     expect(feedUrl('')).toBe('/api/feed')
-    expect(feedUrl('a b/বাংলা')).toBe('/api/feed?project=' + encodeURIComponent('a b/বাংলা'))
+    expect(feedUrl('a b/ñame')).toBe('/api/feed?project=' + encodeURIComponent('a b/ñame'))
     expect(pipelineUrl('x y')).toBe('/api/pipeline?project=x%20y')
     expect(pipelineUrl('')).toBe('/api/pipeline')
   })
@@ -59,10 +59,10 @@ describe('open (spec 013)', () => {
   })
   it('403/500 surfaces error text, fallback otherwise', async () => {
     expect(await openProjectRequest('a', async () => resp(403, { ok: false, error: 'nope' }))).toEqual({ ok: false, error: 'nope' })
-    expect(await openProjectRequest('a', async () => resp(500, null))).toEqual({ ok: false, error: 'খোলা যায়নি' })
+    expect(await openProjectRequest('a', async () => resp(500, null))).toEqual({ ok: false, error: 'Could not open' })
   })
   it('network failure', async () => {
-    expect(await openProjectRequest('a', async () => { throw new Error('x') })).toEqual({ ok: false, error: 'খোলা যায়নি' })
+    expect(await openProjectRequest('a', async () => { throw new Error('x') })).toEqual({ ok: false, error: 'Could not open' })
   })
   it('timing: opening -> opened (2s) -> idle; error 4s', async () => {
     vi.useFakeTimers()

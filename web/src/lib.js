@@ -29,7 +29,7 @@ export const recentSessions = (list, n = 50) =>
 
 export const unreadableCount = (projects = []) => projects.filter((p) => p.requirements.source !== 'sheet').length
 
-const rtf = new Intl.RelativeTimeFormat('bn', { numeric: 'auto' })
+const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
 export function relTime(iso, now = Date.now()) {
   const s = Math.round((new Date(iso).getTime() - now) / 1000)
   for (const [unit, sec] of [['day', 86400], ['hour', 3600], ['minute', 60]]) {
@@ -49,9 +49,9 @@ export async function openProjectRequest(project, fetchFn = fetch, url = '/api/o
     })
     const body = await r.json().catch(() => ({}))
     if (r.ok && body.ok !== false) return { ok: true }
-    return { ok: false, error: body.error || 'খোলা যায়নি' }
+    return { ok: false, error: body.error || 'Could not open' }
   } catch {
-    return { ok: false, error: 'খোলা যায়নি' }
+    return { ok: false, error: 'Could not open' }
   }
 }
 

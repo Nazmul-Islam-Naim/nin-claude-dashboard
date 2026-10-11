@@ -7,7 +7,7 @@ const same = (a, b) => typeof a === 'string' && crypto.timingSafeEqual(sha(a), s
 export const LOOPBACK = new Set(['127.0.0.1', '::1', '::ffff:127.0.0.1']);
 export const defaultIsLocal = (req) => LOOPBACK.has(req.socket.remoteAddress);
 
-const PAGE = '<!doctype html><html lang="bn"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Token দরকার</title><body style="font-family:sans-serif;padding:2rem"><p>এই dashboard-এ ঢুকতে token লাগে। ঠিকানার শেষে ?key=&lt;আপনার token&gt; যোগ করুন।</p></body></html>';
+const PAGE = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Token required</title><body style="font-family:sans-serif;padding:2rem"><p>A token is required to open this dashboard. Add ?key=&lt;your token&gt; to the end of the address.</p></body></html>';
 
 export function authMiddleware({ token, isLocal = defaultIsLocal }) {
   if (!token) return (req, res, next) => next();

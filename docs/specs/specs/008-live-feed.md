@@ -33,24 +33,24 @@ The Projects page shows state per project; the user also wants a running view of
 
 **Layout**
 
-1. `h1` "Live feed" and a `<select>` with "সব project" first, then project names. If the selected name is no longer in `projects`, reset the selection to "সব project".
-2. A `<ul>` of `FeedItem`. Each item: project name as a link to `#/projects/<name>`, the title (empty -> "(শিরোনাম নেই)", single-line ellipsis, full text in `title` attribute), relative time (`title` attribute holds the full local date), and an "Active" badge when `now - lastActivity <= activeMinutes`.
-3. When the list has 100 items, a muted note: "সর্বশেষ ১০০টা দেখানো হচ্ছে".
+1. `h1` "Live feed" and a `<select>` with "All projects" first, then project names. If the selected name is no longer in `projects`, reset the selection to "All projects".
+2. A `<ul>` of `FeedItem`. Each item: project name as a link to `#/projects/<name>`, the title (empty -> "(untitled)", single-line ellipsis, full text in `title` attribute), relative time (`title` attribute holds the full local date), and an "Active" badge when `now - lastActivity <= activeMinutes`.
+3. When the list has 100 items, a muted note: "Showing the latest 100".
 
-**States**: first load -> `Skeleton`; empty list -> `EmptyState` "কোনো activity নেই"; error with no data -> `ErrorNote` in the list area only; later poll errors keep the previous list and show a small `ErrorNote`.
+**States**: first load -> `Skeleton`; empty list -> `EmptyState` "No activity"; error with no data -> `ErrorNote` in the list area only; later poll errors keep the previous list and show a small `ErrorNote`.
 
 **Components**: `FeedPage.jsx`, `FeedItem.jsx`. The active check is a pure helper shared with the detail page (007).
 
 ## Acceptance & Test criteria
 
 1. Items appear newest first and match the API order.
-2. Choosing a project requests `/api/feed?project=<encoded name>`, and the list shows only that project's items; "সব project" requests `/api/feed`.
+2. Choosing a project requests `/api/feed?project=<encoded name>`, and the list shows only that project's items; "All projects" requests `/api/feed`.
 3. Names with spaces or non-ASCII characters are encoded correctly in the request.
 4. A session within `activeMinutes` shows "Active"; an older one does not.
-5. An empty title shows "(শিরোনাম নেই)"; a long title is one line with an ellipsis.
+5. An empty title shows "(untitled)"; a long title is one line with an ellipsis.
 6. A project name links to `#/projects/<name>`.
 7. With exactly 100 items the note appears; with fewer it does not.
-8. If the selected project vanishes from the list, the filter returns to "সব project".
+8. If the selected project vanishes from the list, the filter returns to "All projects".
 9. At 360px there is no horizontal page scroll.
 
 The URL builder and the active check get unit tests; the rest is checked by hand against the real dashboard data.
@@ -62,3 +62,7 @@ None beyond the shell (spec 005).
 ## Open questions
 
 None.
+
+## Change log
+
+- 2026-10-11 (spec 017): UI text is English only.

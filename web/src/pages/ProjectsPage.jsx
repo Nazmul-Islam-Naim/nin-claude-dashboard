@@ -15,7 +15,7 @@ export default function ProjectsPage() {
   return (
     <>
       <h1 className="mb-5 text-2xl font-bold">Projects</h1>
-      <Async res={res} isEmpty={(d) => d.projects.length === 0} empty="কোনো project পাওয়া যায়নি" skeleton={<Skeleton n={6} />}>
+      <Async res={res} isEmpty={(d) => d.projects.length === 0} empty="No projects found" skeleton={<Skeleton n={6} />}>
         {({ kpis, activeMinutes, projects, canOpen }) => {
           const q = query.trim().toLowerCase()
           const pct = (p) => { const c = p.requirements?.counts; const t = c ? Object.values(c).reduce((a, b) => a + b, 0) : 0; return t ? c.Built / t : 0 }
@@ -30,11 +30,11 @@ export default function ProjectsPage() {
                 <KpiCard label="Open requirements" value={kpis.openRequirements} />
                 <KpiCard label="Built" value={`${kpis.built}/${kpis.totalRequirements}`} bar={kpis.totalRequirements ? (kpis.built / kpis.totalRequirements) * 100 : 0} hint={kpis.totalRequirements ? `${Math.round((kpis.built / kpis.totalRequirements) * 100)}%` : ''} />
               </div>
-              <p className="mb-4 mt-2 text-xs text-muted">Active = শেষ {activeMinutes} মিনিট</p>
+              <p className="mb-4 mt-2 text-xs text-muted">Active = last {activeMinutes} min</p>
               <Overview projects={projects} />
               <FilterBar value={filter} onChange={setFilter} counts={counts} query={query} onQuery={setQuery} sort={sort} onSort={setSort} />
               {shown.length === 0 ? (
-                <EmptyState message="এই filter-এ কোনো project নেই" />
+                <EmptyState message="No projects match this filter" />
               ) : (
                 <div className="grid gap-4 [grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))]">
                   {shown.map((p) => <ProjectCard key={p.name} p={p} canOpen={canOpen === true} />)}

@@ -15,7 +15,7 @@ export const EmptyState = ({ message, children }) => (
 
 export const ErrorNote = ({ message }) => (
   <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-    ডেটা আনা যায়নি{message ? ` (${message})` : ''}
+    Could not load data{message ? ` (${message})` : ''}
   </p>
 )
 

@@ -6,10 +6,10 @@ import { spawn as realSpawn } from 'node:child_process';
 const BAD_PATH = /[&|<>^%!"\r\n]/;
 
 export async function openProject({ path: dir, command = process.env.EDITOR_COMMAND || 'code', platform = process.platform, spawner = realSpawn } = {}) {
-  if (typeof command !== 'string' || !/^[A-Za-z0-9._-]+$/.test(command)) return { ok: false, error: 'অবৈধ editor কমান্ড' };
-  if (typeof dir !== 'string' || !path.isAbsolute(dir) || BAD_PATH.test(dir)) return { ok: false, error: 'অবৈধ পথ' };
-  try { if (!fs.statSync(dir).isDirectory()) throw 0; } catch { return { ok: false, error: 'folder পাওয়া যায়নি' }; }
-  const notFound = { ok: false, error: `${command} কমান্ড পাওয়া যায়নি` };
+  if (typeof command !== 'string' || !/^[A-Za-z0-9._-]+$/.test(command)) return { ok: false, error: 'Invalid editor command' };
+  if (typeof dir !== 'string' || !path.isAbsolute(dir) || BAD_PATH.test(dir)) return { ok: false, error: 'Invalid path' };
+  try { if (!fs.statSync(dir).isDirectory()) throw 0; } catch { return { ok: false, error: 'Folder not found' }; }
+  const notFound = { ok: false, error: `${command} command not found` };
   const opts = { detached: true, stdio: 'ignore' };
   let child;
   try {
@@ -71,10 +71,10 @@ const waitPort = (port, tries = 120) => new Promise((resolve) => {
 // Starts each detected dev server in its own terminal window on a free port (Windows),
 // then opens the browser on the frontend (the npm one, else the first) once it listens.
 export async function runProject({ path: dir, platform = process.platform, spawner = realSpawn, opener = (url) => realSpawn('cmd.exe', ['/d', '/c', 'start', '""', url], { detached: true, stdio: 'ignore', windowsHide: true }).unref() } = {}) {
-  if (typeof dir !== 'string' || !path.isAbsolute(dir) || BAD_PATH.test(dir)) return { ok: false, error: 'অবৈধ পথ' };
+  if (typeof dir !== 'string' || !path.isAbsolute(dir) || BAD_PATH.test(dir)) return { ok: false, error: 'Invalid path' };
   const runs = detectRun(dir);
-  if (!runs.length) return { ok: false, error: 'চালানোর মতো project type পাওয়া যায়নি' };
-  if (platform !== 'win32') return { ok: false, error: 'শুধু Windows-এ সমর্থিত' }; // ponytail: add terminal launchers for mac/linux if needed
+  if (!runs.length) return { ok: false, error: 'No runnable project type found' };
+  if (platform !== 'win32') return { ok: false, error: 'Supported on Windows only' }; // ponytail: add terminal launchers for mac/linux if needed
   try {
     const started = [];
     for (const r of runs) {
@@ -84,6 +84,6 @@ export async function runProject({ path: dir, platform = process.platform, spawn
     }
     const target = started.find((x) => x.web) || started[0];
     waitPort(target.port).then((up) => up && opener(`http://localhost:${target.port}`)).catch(() => {});
-  } catch { return { ok: false, error: 'চালু করা যায়নি' }; }
+  } catch { return { ok: false, error: 'Could not start' }; }
   return { ok: true };
 }

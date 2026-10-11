@@ -16,3 +16,6 @@
 | 014 | View the dashboard from the same network | instructions/014-lan-access.md | specs/014-lan-access.md | creates | 2026-10-07 · built |
 | 015 | Project insights (models, plugins, skills) | instructions/015-insights.md | specs/015-insights.md | creates | 2026-10-07 · built |
 | 016 | Project detail page redesign (wide layout, requirement cards) | instructions/016-detail-redesign.md | specs/005-ui-shell.md, specs/007-project-detail.md, specs/015-insights.md | updates | 2026-10-07 · built |
+| 017 | English-only UI | instructions/017-english-ui.md | specs/017-english-ui.md | creates | 2026-10-11 · built |
+| 018 | VS Code extension for the Marketplace | instructions/018-vscode-extension.md | specs/018-vscode-extension.md | creates | 2026-10-11 |
+| 019 | Default port 47615 | instructions/019-default-port.md | specs/003-aggregator-api.md | updates | 2026-10-11 · built |

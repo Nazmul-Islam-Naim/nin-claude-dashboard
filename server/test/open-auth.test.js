@@ -84,7 +84,7 @@ test('013-3 special chars rejected without running; missing folder message', asy
     assert.equal(r.ok, false, JSON.stringify(ch));
   }
   assert.equal(sp.calls.length, 0);
-  assert.deepEqual(await openProject({ path: path.join(base, 'missing'), spawner: sp }), { ok: false, error: 'folder পাওয়া যায়নি' });
+  assert.deepEqual(await openProject({ path: path.join(base, 'missing'), spawner: sp }), { ok: false, error: 'Folder not found' });
   assert.equal(sp.calls.length, 0);
 });
 
@@ -106,7 +106,7 @@ test('013-5 bad EDITOR_COMMAND rejected', async () => {
   const sp = fakeSpawner(ok);
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cmd-'));
   for (const command of ['my editor', 'C:\\x\\code', '/usr/bin/code', 'code&calc', 'code;x', '$(x)', '', 'a|b']) {
-    assert.deepEqual(await openProject({ path: dir, command, spawner: sp }), { ok: false, error: 'অবৈধ editor কমান্ড' }, command);
+    assert.deepEqual(await openProject({ path: dir, command, spawner: sp }), { ok: false, error: 'Invalid editor command' }, command);
   }
   assert.equal(sp.calls.length, 0);
 });
@@ -116,7 +116,7 @@ test('013-6 spawn error -> 500; nonzero exit -> error; timeout -> success', asyn
   try {
     const r = await t.post({ project: t.name });
     assert.equal(r.status, 500);
-    assert.match((await r.json()).error, /কমান্ড পাওয়া যায়নি/);
+    assert.match((await r.json()).error, /command not found/);
   } finally { t.close(); }
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ex-'));
   assert.equal((await openProject({ path: dir, platform: 'linux', spawner: fakeSpawner((c) => c.emit('exit', 1)) })).ok, false);
@@ -169,7 +169,7 @@ test('014-3 remote without cookie/key: 401 JSON on api, Bangla page on /', async
     assert.deepEqual(await a.json(), { error: 'token needed' });
     const p = await fetch(t.url + '/');
     assert.equal(p.status, 401);
-    assert.match(await p.text(), /token লাগে/);
+    assert.match(await p.text(), /token is required/);
   } finally { t.close(); }
 });
 
