@@ -7,3 +7,7 @@
 ## 0.2.0
 
 - Select Google Key File command, first-run prompt, Get Started walkthrough, clearer Sheet error messages.
+
+## 0.2.1
+
+- Overview image on the Marketplace page.

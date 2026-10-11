@@ -1,5 +1,9 @@
 # Claude Dashboard
 
+## Overview
+
+![Claude Dashboard overview](media/overview.png)
+
 See which projects you are working on with Claude Code, right inside VS Code: sessions per project (read from `~/.claude/projects`), a live feed, and each project's requirement status.
 
 ## Quick start
