@@ -57,3 +57,4 @@ Create the Marketplace publisher and PAT, set `publisher` and `repository` in th
 
 - 2026-10-11: created. Added browser command; Open VSX deferred.
 - 2026-10-11: implemented. `server.js` gained a `WEB_DIST` env override. `vsce package` gives a 12-file .vsix with no `.env` or key. Not yet checked in a live VS Code (F5) and not published.
+- 2026-10-11: published as `NazmulIslamNaim.nin-claude-dashboard` (name `claude-dashboard` was taken on the Marketplace).
