@@ -2,9 +2,17 @@ import { MapLabel } from './Badge.jsx'
 import { progress } from '../lib.js'
 
 // Shared by ProjectCard (bar) and detail page (message only). Returns the 006 messages for non-ok states.
+// Turns the server's short Sheet error into something a new user can act on.
+export function sheetErrorText(error = '') {
+  if (error === 'no key path configured') return 'No Google key set. In VS Code run "Claude Dashboard: Select Google Key File".'
+  if (error === 'key file missing or unreadable') return 'Google key file not found. Select it again.'
+  if (/HTTP (403|404)/.test(error)) return 'Sheet is not shared with the service account (Viewer access).'
+  return 'Could not read Sheet'
+}
+
 export function reqMessage(req) {
   if (req.status === 'no-sheet') return 'No Sheet or MAP'
-  if (req.status === 'error') return 'Could not read Sheet'
+  if (req.status === 'error') return sheetErrorText(req.error)
   if (progress(req).total === 0) return 'No requirements'
   return null
 }

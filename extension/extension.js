@@ -52,6 +52,16 @@ async function run(context, fn) {
   try { await fn(await start(context)); } catch (e) { vscode.window.showErrorMessage(`Claude Dashboard: ${e.message}`); }
 }
 
+// One non-blocking offer to add a Google key; "Continue without Sheets" silences it for good.
+function askForKey(context) {
+  if (vscode.workspace.getConfiguration('claudeDashboard').get('keyPath') || context.globalState.get('skipKey')) return;
+  vscode.window.showInformationMessage('Claude Dashboard works without Google Sheets: requirement status then comes from docs/specs/MAP.md. Add a Google key to read Sheets too.', 'Select key file', 'Continue without Sheets', 'How to get a key').then((pick) => {
+    if (pick === 'Select key file') vscode.commands.executeCommand('claudeDashboard.selectKey');
+    else if (pick === 'Continue without Sheets') context.globalState.update('skipKey', true);
+    else if (pick === 'How to get a key') vscode.commands.executeCommand('claudeDashboard.getStarted');
+  });
+}
+
 function activate(context) {
   out = vscode.window.createOutputChannel('Claude Dashboard');
   const bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0);
@@ -61,7 +71,13 @@ function activate(context) {
 
   context.subscriptions.push(
     out, bar, { dispose: stop },
+    vscode.commands.registerCommand('claudeDashboard.selectKey', async () => {
+      const [file] = (await vscode.window.showOpenDialog({ canSelectMany: false, filters: { 'Google key (.json)': ['json'] }, title: 'Select your Google service account key' })) || [];
+      if (file) await vscode.workspace.getConfiguration('claudeDashboard').update('keyPath', file.fsPath, vscode.ConfigurationTarget.Global);
+    }),
+    vscode.commands.registerCommand('claudeDashboard.getStarted', () => vscode.commands.executeCommand('workbench.action.openWalkthrough', `${context.extension.id}#start`, false)),
     vscode.commands.registerCommand('claudeDashboard.open', () => run(context, async (url) => {
+      askForKey(context);
       if (panel) return panel.reveal();
       panel = vscode.window.createWebviewPanel('claudeDashboard', 'Claude Dashboard', vscode.ViewColumn.Active, { enableScripts: true, retainContextWhenHidden: true });
       panel.onDidDispose(() => { panel = undefined; });
@@ -72,8 +88,9 @@ function activate(context) {
     vscode.workspace.onDidChangeConfiguration((e) => {
       if (!e.affectsConfiguration('claudeDashboard')) return;
       stop();
-      if (panel) panel.dispose();
-      vscode.window.showInformationMessage('Claude Dashboard settings changed. Open the dashboard again to apply them.');
+      if (!panel) return;
+      panel.dispose();
+      vscode.commands.executeCommand('claudeDashboard.open'); // restart with the new settings
     }),
   );
 }

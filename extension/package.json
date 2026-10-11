@@ -2,28 +2,86 @@
   "name": "claude-dashboard",
   "displayName": "Claude Dashboard",
   "description": "See your Claude Code sessions and requirement status per project, inside VS Code.",
-  "version": "0.1.0",
-  "publisher": "naim",
+  "version": "0.2.0",
+  "publisher": "NazmulIslamNaim",
   "license": "MIT",
   "icon": "icon.png",
-  "repository": { "type": "git", "url": "https://github.com/Nazmul-Islam-Naim/nin-claude-dashboard.git" },
-  "engines": { "vscode": "^1.85.0" },
-  "categories": ["Other"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nazmul-Islam-Naim/nin-claude-dashboard.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
   "main": "./extension.js",
   "activationEvents": [],
   "contributes": {
     "commands": [
-      { "command": "claudeDashboard.open", "title": "Claude Dashboard: Open" },
-      { "command": "claudeDashboard.openInBrowser", "title": "Claude Dashboard: Open in Browser" }
+      {
+        "command": "claudeDashboard.open",
+        "title": "Claude Dashboard: Open"
+      },
+      {
+        "command": "claudeDashboard.openInBrowser",
+        "title": "Claude Dashboard: Open in Browser"
+      },
+      {
+        "command": "claudeDashboard.selectKey",
+        "title": "Claude Dashboard: Select Google Key File"
+      },
+      {
+        "command": "claudeDashboard.getStarted",
+        "title": "Claude Dashboard: Get Started"
+      }
     ],
     "configuration": {
       "title": "Claude Dashboard",
       "properties": {
-        "claudeDashboard.keyPath": { "type": "string", "default": "", "description": "Path to the Google service account key (.json) used to read each project's Sheet. Leave empty to skip Sheets (MAP.md still works)." },
-        "claudeDashboard.port": { "type": "number", "default": 0, "description": "Local port for the dashboard server. 0 picks a free port." },
-        "claudeDashboard.editorCommand": { "type": "string", "default": "", "description": "Command used by the \"Open in VS Code\" button. Empty uses `code`." }
+        "claudeDashboard.keyPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Google service account key (.json) used to read each project's Sheet. Leave empty to skip Sheets (MAP.md still works)."
+        },
+        "claudeDashboard.port": {
+          "type": "number",
+          "default": 0,
+          "description": "Local port for the dashboard server. 0 picks a free port."
+        },
+        "claudeDashboard.editorCommand": {
+          "type": "string",
+          "default": "",
+          "description": "Command used by the \"Open in VS Code\" button. Empty uses `code`."
+        }
       }
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "start",
+        "title": "Get started with Claude Dashboard",
+        "description": "Open the dashboard and optionally connect Google Sheets.",
+        "steps": [
+          {
+            "id": "open",
+            "title": "Open the dashboard",
+            "description": "See your projects and sessions.\n[Open Dashboard](command:claudeDashboard.open)",
+            "media": {
+              "markdown": "walkthrough/start.md"
+            }
+          },
+          {
+            "id": "key",
+            "title": "Connect Google Sheets (optional)",
+            "description": "Pick your service account key file.\n[Select Google Key File](command:claudeDashboard.selectKey)",
+            "media": {
+              "markdown": "walkthrough/start.md"
+            }
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "build": "node build.mjs",
