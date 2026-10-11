@@ -2,7 +2,7 @@
 
 ## Overview
 
-![Claude Dashboard overview](media/overview.png)
+![Claude Dashboard overview](https://raw.githubusercontent.com/Nazmul-Islam-Naim/nin-claude-dashboard/main/extension/media/overview.png)
 
 See which projects you are working on with Claude Code, right inside VS Code: sessions per project (read from `~/.claude/projects`), a live feed, and each project's requirement status.
 

@@ -11,3 +11,7 @@
 ## 0.2.1
 
 - Overview image on the Marketplace page.
+
+## 0.2.2
+
+- Fix the broken overview image (absolute image URL).
