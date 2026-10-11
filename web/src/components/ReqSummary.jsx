@@ -21,10 +21,10 @@ export default function ReqSummary({ req }) {
   return (
     <>
       <p className="mb-2 flex items-center justify-between text-[13px] font-semibold">
-        <span>Development: {done}/{total} Built</span>
+        <span>Development: {done}/{total} Built <span className="font-normal text-muted">· {Math.round((done / total) * 100)}%</span></span>
         {isMap && <MapLabel />}
       </p>
-      <div className="flex h-2 overflow-hidden rounded-full bg-slate-100" role="img" aria-label={`${done}/${total} Built`}>
+      <div className="flex h-2.5 overflow-hidden rounded-full bg-slate-100" role="img" aria-label={`${done}/${total} Built`}>
         {SEGMENTS.map(([k, cls]) => (c[k] ? <i key={k} className={`block h-full ${cls}`} style={{ width: `${(c[k] / total) * 100}%` }} /> : null))}
       </div>
       <p className="mt-2 text-[13px] text-muted">মোট {total} · {parts.join(' · ')}</p>

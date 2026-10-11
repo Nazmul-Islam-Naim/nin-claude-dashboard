@@ -8,7 +8,7 @@ import { readRequirements } from './sheetReader.js';
 import { readSpecs } from './specReader.js';
 import { aggregate, feed, pipeline } from './aggregate.js';
 import { readInsights } from './insightsReader.js';
-import { openProject } from './openProject.js';
+import { openProject, runProject, detectRun } from './openProject.js';
 import { authMiddleware, defaultIsLocal } from './auth.js';
 
 export function createApp({ root = process.env.CLAUDE_PROJECTS_DIR || path.join(os.homedir(), '.claude', 'projects'), read = readRequirements, readSpec = readSpecs, spawner, now = undefined, isLocal = defaultIsLocal, token = process.env.DASHBOARD_TOKEN } = {}) {
@@ -27,9 +27,9 @@ export function createApp({ root = process.env.CLAUDE_PROJECTS_DIR || path.join(
   const wrap = (fn) => async (req, res) => {
     try { res.json(await fn(req)); } catch (e) { res.status(500).json({ error: String(e.message || e).slice(0, 200) }); }
   };
-  app.get('/api/projects', wrap(async (req) => ({ ...(await full()), canOpen: isLocal(req) })));
+  app.get('/api/projects', wrap(async (req) => { const d = await full(); const local = isLocal(req); return { ...d, projects: d.projects.map((p) => ({ ...p, run: local ? detectRun(p.path).map((r) => `${path.relative(p.path, r.dir) || '.'}: ${r.cmd}`) : [] })), canOpen: local }; }));
   const lastOpen = new Map();
-  app.post('/api/open', (req, res, next) => {
+  app.post(['/api/open', '/api/run'], (req, res, next) => {
     const origin = req.headers.origin, port = req.socket.localPort;
     if (!isLocal(req)) return res.status(403).json({ ok: false, error: 'শুধু এই machine থেকে' });
     if (origin && origin !== `http://127.0.0.1:${port}` && origin !== `http://localhost:${port}`) return res.status(403).json({ ok: false, error: 'অনুমতি নেই' });
@@ -40,9 +40,9 @@ export function createApp({ root = process.env.CLAUDE_PROJECTS_DIR || path.join(
       const name = req.body && req.body.project;
       const p = typeof name === 'string' && scan().projects.find((x) => x.path.split('/').pop() === name);
       if (!p) return res.status(404).json({ ok: false, error: 'project পাওয়া যায়নি' });
-      if (Date.now() - (lastOpen.get(name) || 0) < 2000) return res.status(429).json({ ok: false, error: 'একটু পরে চেষ্টা করুন' });
-      lastOpen.set(name, Date.now());
-      const r = await openProject({ path: p.path, spawner });
+      if (Date.now() - (lastOpen.get(req.path + name) || 0) < 2000) return res.status(429).json({ ok: false, error: 'একটু পরে চেষ্টা করুন' });
+      lastOpen.set(req.path + name, Date.now());
+      const r = req.path === '/api/run' ? await runProject({ path: p.path, spawner }) : await openProject({ path: p.path, spawner });
       res.status(r.ok ? 200 : 500).json(r);
     } catch (e) { res.status(500).json({ ok: false, error: String(e.message || e).slice(0, 200) }); }
   });

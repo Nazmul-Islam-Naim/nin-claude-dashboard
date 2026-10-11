@@ -21,6 +21,7 @@ export default function DetailHeader({ p, canOpen }) {
             </a>
           )}
           {canOpen === true && <OpenButton project={p.name} />}
+          {canOpen === true && p.run?.length > 0 && <OpenButton project={p.name} run title={p.run.join(' | ')} />}
         </div>
       </div>
     </header>

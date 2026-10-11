@@ -40,9 +40,9 @@ export function relTime(iso, now = Date.now()) {
 export const fullDate = (iso) => new Date(iso).toLocaleString()
 
 // Spec 013: POST /api/open. Never throws; returns { ok, error }.
-export async function openProjectRequest(project, fetchFn = fetch) {
+export async function openProjectRequest(project, fetchFn = fetch, url = '/api/open') {
   try {
-    const r = await fetchFn('/api/open', {
+    const r = await fetchFn(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ project }),
@@ -56,9 +56,9 @@ export async function openProjectRequest(project, fetchFn = fetch) {
 }
 
 // idle -> opening -> opened (2 s) | error (4 s) -> idle. setState gets { s, error? }.
-export async function runOpen(project, setState, fetchFn) {
+export async function runOpen(project, setState, fetchFn, url) {
   setState({ s: 'opening' })
-  const r = await openProjectRequest(project, fetchFn)
+  const r = await openProjectRequest(project, fetchFn, url)
   setState(r.ok ? { s: 'opened' } : { s: 'error', error: r.error })
   setTimeout(() => setState({ s: 'idle' }), r.ok ? 2000 : 4000)
 }
