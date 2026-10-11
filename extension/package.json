@@ -1,0 +1,37 @@
+{
+  "name": "claude-dashboard",
+  "displayName": "Claude Dashboard",
+  "description": "See your Claude Code sessions and requirement status per project, inside VS Code.",
+  "version": "0.1.0",
+  "publisher": "naim",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": { "type": "git", "url": "https://github.com/Nazmul-Islam-Naim/nin-claude-dashboard.git" },
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "main": "./extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      { "command": "claudeDashboard.open", "title": "Claude Dashboard: Open" },
+      { "command": "claudeDashboard.openInBrowser", "title": "Claude Dashboard: Open in Browser" }
+    ],
+    "configuration": {
+      "title": "Claude Dashboard",
+      "properties": {
+        "claudeDashboard.keyPath": { "type": "string", "default": "", "description": "Path to the Google service account key (.json) used to read each project's Sheet. Leave empty to skip Sheets (MAP.md still works)." },
+        "claudeDashboard.port": { "type": "number", "default": 0, "description": "Local port for the dashboard server. 0 picks a free port." },
+        "claudeDashboard.editorCommand": { "type": "string", "default": "", "description": "Command used by the \"Open in VS Code\" button. Empty uses `code`." }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "package": "npm run build && vsce package",
+    "publish": "npm run build && vsce publish"
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^3.2.0",
+    "esbuild": "^0.25.0"
+  }
+}
