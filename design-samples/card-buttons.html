@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Card buttons</title>
+<style>
+:root{--bg:#f6f7fb;--panel:#fff;--line:#e5e8f0;--fg:#161b2e;--muted:#6b7490;--primary:#4f46e5;--success:#10b981}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px Inter,system-ui,sans-serif;padding:28px 32px;width:1500px}
+h1{font-size:20px;margin:0 0 4px}p.sub{margin:0 0 22px;color:var(--muted)}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:34px}
+h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.variant{background:#eef0f8;border-radius:16px;padding:16px}
+.variant h3{margin:0 0 4px;font-size:15px}.variant small{display:block;color:var(--muted);margin-bottom:12px;min-height:32px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 1px 2px rgba(20,27,60,.04);margin-bottom:12px}
+.card h4{margin:0 0 4px;display:flex;justify-content:space-between;font-size:15px}
+.badge{font-size:11px;font-weight:600;padding:2px 9px;border-radius:99px;background:#e8eaf2;color:var(--muted)}.badge.on{background:#d7f5e9;color:#067a55}
+.meta{color:var(--muted);margin:0 0 12px}.bar{height:8px;border-radius:9px;background:var(--primary);margin:6px 0 14px}
+.actions{border-top:1px solid var(--line);padding-top:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.status{display:flex;gap:10px;align-items:center;font-size:13px;margin-bottom:12px;flex-wrap:wrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 0 rgba(16,185,129,.5);display:inline-block}
+.status a{color:var(--primary);text-decoration:none;font-weight:500}
+svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button,.btn{font:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:7px;border:0}
+/* A: action bar */
+.a-main{background:var(--primary);color:#fff;font-weight:600;padding:9px 16px;border-radius:10px;box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 2px 6px rgba(79,70,229,.3);transition:.15s}
+.a-main.hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 6px 14px rgba(79,70,229,.4)}
+.a-main.press{transform:scale(.97);box-shadow:0 1px 2px rgba(79,70,229,.4)}
+.a-main .dot{box-shadow:none;border:1.5px solid #fff}
+.a-ico{width:38px;height:38px;justify-content:center;border-radius:10px;background:#fff;border:1px solid var(--line);color:var(--muted);transition:.15s}
+.a-ico.hover{color:var(--primary);border-color:var(--primary);background:#f1f0ff;transform:translateY(-1px)}
+.a-ico.press{transform:scale(.94)}
+.sp{flex:1}
+/* B: pills */
+.pill{padding:8px 14px;border-radius:99px;font-weight:600;transition:.15s}
+.p-code{background:#e0ecff;color:#1d4ed8}.p-sheet{background:#d8f5e6;color:#067a55}.p-srv{background:#ece6ff;color:#5b34d6}
+.pill.hover{filter:saturate(1.3) brightness(.96);transform:translateY(-1px);box-shadow:0 4px 10px rgba(30,40,90,.15)}
+.pill.press{transform:scale(.96)}
+/* C: minimal */
+.m{padding:8px 12px;border-radius:8px;background:transparent;color:var(--muted);font-weight:500;transition:.15s}
+.m.hover{background:#eef0f8;color:var(--fg)}.m.press{background:#e2e5f2}
+.m-main{padding:8px 14px;border-radius:8px;background:var(--fg);color:#fff;font-weight:600}
+.m-main.hover{background:#2b3252}
+.lab{font-size:11px;color:var(--muted);margin:10px 0 4px}
+.focus{outline:2px solid var(--primary);outline-offset:2px}
+/* modal */
+.shade{background:rgba(22,27,46,.45);border-radius:16px;padding:30px;display:flex;justify-content:center}
+.modal{background:#fff;border-radius:14px;width:640px;box-shadow:0 20px 50px rgba(20,27,60,.3);overflow:hidden}
+.mh{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+.mh h4{margin:0;font-size:16px}.x{width:30px;height:30px;justify-content:center;border-radius:8px;background:#f1f2f8;color:var(--muted)}
+.svc{display:grid;grid-template-columns:1fr auto auto auto;gap:14px;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.svc:last-of-type{border-bottom:0}.k{font-family:ui-monospace,monospace;font-size:13px}.k small{display:block;color:var(--muted);font-family:Inter,sans-serif;margin-top:2px}
+.run{color:#067a55;font-weight:600;display:flex;gap:6px;align-items:center}.stop{color:var(--muted);display:flex;gap:6px;align-items:center}
+.port{width:84px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit}
+.go{background:var(--primary);color:#fff;font-weight:600;padding:8px 16px;border-radius:9px}.halt{background:#fff;border:1px solid var(--line);color:var(--primary);font-weight:600;padding:8px 16px;border-radius:9px}
+.err{grid-column:1/-1;color:#b91c1c;font-size:12px;margin-top:-6px}
+.mf{padding:12px 20px;background:#f8f9fd;display:flex;justify-content:space-between;color:var(--muted);font-size:12px;align-items:center}
+.mf .go{padding:7px 14px}
+</style></head><body>
+<h1>Project card: button directions</h1>
+<p class="sub">Each direction shown at rest, hover, pressed, and with a running server. Same card content, only the actions row changes.</p>
+
+<h2>Card, no server running</h2>
+<div class="row">
+  <div class="variant"><h3>A · Action bar (recommended)</h3><small>One filled primary action, icon-only secondary buttons with tooltips. Clear hierarchy.</small>
+    <div class="card"><h4>nin-claude-dashboard <span class="badge on">Active</span></h4><p class="meta">Last session 41 seconds ago · 2 sessions</p><div class="bar"></div>
+      <div class="actions">
+        <button class="a-main"><svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="4" rx="1"/><rect x="2" y="9" width="12" height="4" rx="1"/><path d="M4.5 5h.01M4.5 11h.01"/></svg>Servers</button>
+        <span class="sp"></span>
+        <button class="a-ico" title="Open in VS Code"><svg viewBox="0 0 16 16"><path d="M5.5 4 1.5 8l4 4M10.5 4l4 4-4 4"/></svg></button>
+        <button class="a-ico" title="Google Sheet"><svg viewBox="0 0 16 16"><rect x="2.5" y="2" width="11" height="12" rx="1.5"/><path d="M2.5 6h11M2.5 10h11M7 6v8"/></svg></button>
+      </div></div>
+    <div class="lab">Hover / pressed / keyboard focus</div>
+    <div class="card"><div class="actions">
+      <button class="a-main hover"><svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="4" rx="1"/><rect x="2" y="9" width="12" height="4" rx="1"/></svg>Servers</button>
+      <button class="a-main press">Servers</button>
+      <span class="sp"></span>
+      <button class="a-ico hover"><svg viewBox="0 0 16 16"><path d="M5.5 4 1.5 8l4 4M10.5 4l4 4-4 4"/></svg></button>
+      <button class="a-ico press"><svg viewBox="0 0 16 16"><path d="M5.5 4 1.5 8l4 4M10.5 4l4 4-4 4"/></svg></button>
+      <button class="a-ico focus"><svg viewBox="0 0 16 16"><rect x="2.5" y="2" width="11" height="12" rx="1.5"/><path d="M2.5 6h11M2.5 10h11"/></svg></button>
+    </div></div>
+  </div>
+
+  <div class="variant"><h3>B · Colored pills</h3><small>Each action has its own tint, so it is recognisable without reading. Busier.</small>
+    <div class="card"><h4>nin-claude-dashboard <span class="badge on">Active</span></h4><p class="meta">Last session 41 seconds ago · 2 sessions</p><div class="bar"></div>
+      <div class="actions">
+        <button class="pill p-code"><svg viewBox="0 0 16 16"><path d="M5.5 4 1.5 8l4 4M10.5 4l4 4-4 4"/></svg>VS Code</button>
+        <button class="pill p-sheet"><svg viewBox="0 0 16 16"><rect x="2.5" y="2" width="11" height="12" rx="1.5"/><path d="M2.5 6h11M2.5 10h11"/></svg>Sheet</button>
+        <button class="pill p-srv"><svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="4" rx="1"/><rect x="2" y="9" width="12" height="4" rx="1"/></svg>Servers</button>
+      </div></div>
+    <div class="lab">Hover / pressed</div>
+    <div class="card"><div class="actions">
+      <button class="pill p-code hover">VS Code</button><button class="pill p-sheet press">Sheet</button><button class="pill p-srv hover">Servers</button>
+    </div></div>
+  </div>
+
+  <div class="variant"><h3>C · Minimal</h3><small>Quiet ghost buttons, one dark primary. Closest to today, just more interactive.</small>
+    <div class="card"><h4>nin-claude-dashboard <span class="badge on">Active</span></h4><p class="meta">Last session 41 seconds ago · 2 sessions</p><div class="bar"></div>
+      <div class="actions">
+        <button class="m-main"><svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="4" rx="1"/><rect x="2" y="9" width="12" height="4" rx="1"/></svg>Servers</button>
+        <span class="sp"></span>
+        <button class="m"><svg viewBox="0 0 16 16"><path d="M5.5 4 1.5 8l4 4M10.5 4l4 4-4 4"/></svg>VS Code</button>
+        <button class="m"><svg viewBox="0 0 16 16"><rect x="2.5" y="2" width="11" height="12" rx="1.5"/><path d="M2.5 6h11M2.5 10h11"/></svg>Sheet</button>
+      </div></div>
+    <div class="lab">Hover / pressed</div>
+    <div class="card"><div class="actions">
+      <button class="m-main hover">Servers</button><span class="sp"></span><button class="m hover">VS Code</button><button class="m press">Sheet</button>
+    </div></div>
+  </div>
+</div>
+
+<h2>Card with a server running (status + link)</h2>
+<div class="row">
+  <div class="variant"><h3>A · Action bar</h3><small>Button turns green-dotted; a status line with the link sits above the actions.</small>
+    <div class="card"><h4>w3-pro-travel <span class="badge on">Active</span></h4><p class="meta">Last session 2 minutes ago · 10 sessions</p>
+      <div class="status"><span class="dot"></span><b>2 running</b><a href="#">localhost:3000 ↗</a><a href="#">localhost:8000 ↗</a></div>
+      <div class="actions">
+        <button class="a-main"><span class="dot"></span>Servers · 2</button><span class="sp"></span>
+        <button class="a-ico"><svg viewBox="0 0 16 16"><path d="M5.5 4 1.5 8l4 4M10.5 4l4 4-4 4"/></svg></button>
+        <button class="a-ico"><svg viewBox="0 0 16 16"><rect x="2.5" y="2" width="11" height="12" rx="1.5"/><path d="M2.5 6h11M2.5 10h11"/></svg></button>
+      </div></div></div>
+  <div class="variant"><h3>B · Colored pills</h3><small>Running count lives inside the Servers pill.</small>
+    <div class="card"><h4>w3-pro-travel <span class="badge on">Active</span></h4><p class="meta">Last session 2 minutes ago · 10 sessions</p>
+      <div class="status"><span class="dot"></span><b>2 running</b><a href="#">localhost:3000 ↗</a><a href="#">localhost:8000 ↗</a></div>
+      <div class="actions"><button class="pill p-code">VS Code</button><button class="pill p-sheet">Sheet</button><button class="pill p-srv"><span class="dot"></span>Servers · 2</button></div></div></div>
+  <div class="variant"><h3>C · Minimal</h3><small>Same status line, quiet buttons.</small>
+    <div class="card"><h4>w3-pro-travel <span class="badge on">Active</span></h4><p class="meta">Last session 2 minutes ago · 10 sessions</p>
+      <div class="status"><span class="dot"></span><b>2 running</b><a href="#">localhost:3000 ↗</a><a href="#">localhost:8000 ↗</a></div>
+      <div class="actions"><button class="m-main"><span class="dot"></span>Servers · 2</button><span class="sp"></span><button class="m">VS Code</button><button class="m">Sheet</button></div></div></div>
+</div>
+
+<h2>Servers modal (opens from the card's Servers button)</h2>
+<div class="shade"><div class="modal">
+  <div class="mh"><h4>Servers · w3-pro-travel</h4><button class="x">✕</button></div>
+  <div class="svc"><div class="k">backend: php artisan serve<small>Laravel</small></div><span class="run"><span class="dot"></span>Running</span><span>Port <input class="port" value="8000" disabled></span><button class="halt">Stop</button></div>
+  <div class="svc"><div class="k">frontend: npm run dev<small>Next.js · <a href="#" style="color:#4f46e5;text-decoration:none">localhost:3000 ↗</a></small></div><span class="run"><span class="dot"></span>Running</span><span>Port <input class="port" value="3000" disabled></span><button class="halt">Stop</button></div>
+  <div class="svc"><div class="k">admin: npm run dev<small>Next.js</small></div><span class="stop">● Stopped</span><span>Port <input class="port" value="3000"></span><button class="go">Start</button>
+    <div class="err">Port 3000 is used by project w3-pro-travel (frontend)</div></div>
+  <div class="mf"><span>A saved port is always used; if it is busy the start is blocked. Leave empty for a free port.</span><button class="go">Start all</button></div>
+</div></div>
+</body></html>

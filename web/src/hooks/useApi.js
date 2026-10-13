@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 
 export const POLL_MS = 5000
+// Fired after a run/stop/port change so every list refetches at once instead of waiting for the next poll.
+export const REFRESH_EVENT = 'dashboard:refresh'
 
 export function useApi(url) {
   const [state, setState] = useState({ data: null, loading: true, error: null })
@@ -25,8 +27,9 @@ export function useApi(url) {
     const onVis = () => { if (!document.hidden) tick(); else clearTimeout(timer) }
 
     document.addEventListener('visibilitychange', onVis)
+    window.addEventListener(REFRESH_EVENT, tick)
     if (!document.hidden) tick()
-    return () => { dead = true; clearTimeout(timer); document.removeEventListener('visibilitychange', onVis) }
+    return () => { dead = true; clearTimeout(timer); document.removeEventListener('visibilitychange', onVis); window.removeEventListener(REFRESH_EVENT, tick) }
   }, [url])
 
   return state

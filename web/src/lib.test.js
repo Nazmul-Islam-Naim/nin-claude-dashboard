@@ -128,3 +128,51 @@ describe('requirement grid helpers', () => {
     expect(limitList(l, PAGE * 3).rest).toBe(0)
   })
 })
+
+import { sendJson, serviceError, runningCount, pluginsUrl } from './lib.js'
+
+describe('specs 021/022 helpers', () => {
+  it('serviceError names owner', () => {
+    expect(serviceError({ body: { error: 'port-busy', port: 3000, owner: { project: 'a' } } })).toBe('Port 3000 is used by project a')
+    expect(serviceError({ body: { error: 'port-busy', port: 3000, owner: { external: true, pid: 9 } } })).toBe('Port 3000 is used by another program (pid 9)')
+    expect(serviceError({ body: { error: 'port-taken', owner: { project: 'b' } } })).toBe('This port is already assigned to project b')
+    expect(serviceError({ body: {} })).toBe('Request failed')
+  })
+  it('sendJson never throws and reports status', async () => {
+    expect(await sendJson('PUT', '/x', {}, () => Promise.reject(new Error('x')))).toEqual({ ok: false, status: 0, body: {} })
+    const r = await sendJson('POST', '/x', { a: 1 }, () => Promise.resolve({ ok: false, status: 409, json: () => Promise.resolve({ error: 'port-busy' }) }))
+    expect([r.ok, r.status, r.body.error]).toEqual([false, 409, 'port-busy'])
+  })
+  it('runningCount and pluginsUrl', () => {
+    expect(runningCount({ services: [{ state: 'running' }, { state: 'stopped' }] })).toBe(1)
+    expect(runningCount({})).toBe(0)
+    expect(pluginsUrl('my proj')).toBe('/api/projects/my%20proj/plugins')
+  })
+})
+
+import { serviceUrl, runningServices, faviconSvg, faviconHref, accentHex, pageTitle } from './lib.js'
+
+describe('card status and favicon', () => {
+  it('serviceUrl accepts only valid numeric ports', () => {
+    expect(serviceUrl(3000)).toBe('http://localhost:3000')
+    for (const bad of [null, undefined, '3000', 0, 70000, 3000.5, NaN]) expect(serviceUrl(bad)).toBeNull()
+  })
+  it('runningServices', () => {
+    expect(runningServices({ services: [{ state: 'running' }, { state: 'stopped' }] })).toHaveLength(1)
+    expect(runningServices({})).toEqual([])
+  })
+  it('favicon reflects accent, running dot and active ring', () => {
+    const base = faviconSvg({ accent: '#d97757' })
+    expect(base).toContain('fill="#d97757"')
+    expect(base).not.toContain('#10b981')
+    expect(faviconSvg({ running: true })).toContain('#10b981')
+    expect(faviconSvg({ active: true })).toContain('stroke-opacity')
+    expect(faviconHref({})).toMatch(/^data:image\/svg\+xml,%3Csvg/)
+  })
+  it('accentHex falls back to indigo; title shows running count', () => {
+    expect(accentHex('clay')).toBe('#d97757')
+    expect(accentHex('nope')).toBe('#4f46e5')
+    expect(pageTitle(0)).toBe('Nin Dashboard')
+    expect(pageTitle(2)).toBe('● 2 running · Nin Dashboard')
+  })
+})
