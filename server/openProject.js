@@ -55,35 +55,15 @@ export function detectRun(dir) {
   return subs.flatMap((e) => { const d = path.join(dir, e.name); const cmd = detectOne(d); return cmd ? [{ dir: d, cmd }] : []; });
 }
 
-const freePort = () => new Promise((resolve, reject) => {
+export const freePort = () => new Promise((resolve, reject) => {
   const srv = net.createServer().unref().once('error', reject).listen(0, () => { const { port } = srv.address(); srv.close(() => resolve(port)); });
 });
-const withPort = (cmd, n) => cmd.startsWith('php artisan') ? `${cmd} --port=${n}` : cmd.startsWith('uvicorn') ? `${cmd} --port ${n}` : cmd.startsWith('python manage.py') ? `${cmd} ${n}` : `${cmd} -- --port ${n}`;
+export const withPort = (cmd, n) => cmd.startsWith('php artisan') ? `${cmd} --port=${n}` : cmd.startsWith('uvicorn') ? `${cmd} --port ${n}` : cmd.startsWith('python manage.py') ? `${cmd} ${n}` : `${cmd} -- --port ${n}`;
 // Resolves once something accepts connections on the port (60 s max), else false.
-const waitPort = (port, tries = 120) => new Promise((resolve) => {
+export const waitPort = (port, tries = 120) => new Promise((resolve) => {
   const go = (left) => {
     const sock = net.connect({ port, host: 'localhost' }, () => { sock.destroy(); resolve(true); });
     sock.once('error', () => { sock.destroy(); if (left <= 0) resolve(false); else setTimeout(() => go(left - 1), 500).unref(); });
   };
   go(tries);
 });
-
-// Starts each detected dev server in its own terminal window on a free port (Windows),
-// then opens the browser on the frontend (the npm one, else the first) once it listens.
-export async function runProject({ path: dir, platform = process.platform, spawner = realSpawn, opener = (url) => realSpawn('cmd.exe', ['/d', '/c', 'start', '""', url], { detached: true, stdio: 'ignore', windowsHide: true }).unref() } = {}) {
-  if (typeof dir !== 'string' || !path.isAbsolute(dir) || BAD_PATH.test(dir)) return { ok: false, error: 'Invalid path' };
-  const runs = detectRun(dir);
-  if (!runs.length) return { ok: false, error: 'No runnable project type found' };
-  if (platform !== 'win32') return { ok: false, error: 'Supported on Windows only' }; // ponytail: add terminal launchers for mac/linux if needed
-  try {
-    const started = [];
-    for (const r of runs) {
-      const port = await freePort();
-      spawner('cmd.exe', ['/d', '/s', '/c', `start "${path.basename(r.dir)}" /D "${r.dir}" cmd /k ${withPort(r.cmd, port)}`], { detached: true, stdio: 'ignore', windowsVerbatimArguments: true, windowsHide: true, env: { ...process.env, PORT: String(port) } }).unref?.();
-      started.push({ port, web: r.cmd.startsWith('npm') });
-    }
-    const target = started.find((x) => x.web) || started[0];
-    waitPort(target.port).then((up) => up && opener(`http://localhost:${target.port}`)).catch(() => {});
-  } catch { return { ok: false, error: 'Could not start' }; }
-  return { ok: true };
-}
