@@ -22,3 +22,7 @@
 - Servers modal on every project card, with `localhost` links for running servers.
 - Turn Claude plugins on or off per project from the dashboard.
 - New card buttons, live tab icon (green dot while a server runs) and an accent colour picker.
+
+## 0.3.1
+
+- New extension icon and a new overview screenshot.

@@ -2,7 +2,7 @@
   "name": "nin-claude-dashboard",
   "displayName": "Nin Claude Dashboard",
   "description": "See your Claude Code sessions and requirement status per project, inside VS Code.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "publisher": "NazmulIslamNaim",
   "license": "MIT",
   "icon": "icon.png",
