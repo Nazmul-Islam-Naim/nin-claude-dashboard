@@ -12,6 +12,12 @@ See which projects you are working on with Claude Code, right inside VS Code: se
 2. Run **Claude Dashboard: Open** (or click **Claude Dashboard** in the status bar).
 3. That's it. You see your projects and sessions. Requirement status comes from `docs/specs/MAP.md` in each project.
 
+## Run servers and manage plugins
+
+- **Servers:** each project card has a **Servers** button. Set a fixed port per service (Laravel, Django, FastAPI, npm `dev`/`start`), then Start or Stop. A busy port blocks the start and tells you who uses it. Running projects show `localhost:<port>` links on the card.
+- **Claude plugins:** on a project's page, switch plugins on or off for that project only (written to `.claude/settings.local.json`).
+- **Accent colour:** pick a colour in the header; the tab icon follows it and shows a green dot while a server runs.
+
 ## Optional: read requirements from Google Sheets
 
 Run **Claude Dashboard: Get Started** for the full walkthrough, or:
