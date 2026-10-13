@@ -1,7 +1,7 @@
 ---
 id: "018"
 title: VS Code extension for the Marketplace
-status: draft
+status: built
 date: 2026-10-11
 instruction: docs/specs/instructions/018-vscode-extension.md
 ---

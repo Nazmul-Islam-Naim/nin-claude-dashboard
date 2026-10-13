@@ -17,6 +17,9 @@
 | 015 | Project insights (models, plugins, skills) | instructions/015-insights.md | specs/015-insights.md | creates | 2026-10-07 · built |
 | 016 | Project detail page redesign (wide layout, requirement cards) | instructions/016-detail-redesign.md | specs/005-ui-shell.md, specs/007-project-detail.md, specs/015-insights.md | updates | 2026-10-07 · built |
 | 017 | English-only UI | instructions/017-english-ui.md | specs/017-english-ui.md | creates | 2026-10-11 · built |
-| 018 | VS Code extension for the Marketplace | instructions/018-vscode-extension.md | specs/018-vscode-extension.md | creates | 2026-10-11 |
+| 018 | VS Code extension for the Marketplace | instructions/018-vscode-extension.md | specs/018-vscode-extension.md | creates | 2026-10-11 · built |
 | 019 | Default port 47615 | instructions/019-default-port.md | specs/003-aggregator-api.md | updates | 2026-10-11 · built |
 | 020 | Easy first-run setup for the extension | instructions/020-easy-setup.md | specs/020-easy-setup.md | creates | 2026-10-11 · built |
+| 021 | Fixed project ports with run, stop and status | instructions/021-fixed-ports-run-stop.md | specs/021-fixed-ports-run-stop.md | creates | 2026-10-13 · built |
+| 022 | Enable and disable Claude plugins per project | instructions/022-project-plugin-toggle.md | specs/022-project-plugin-toggle.md | creates | 2026-10-13 · built |
+| 023 | Card polish, Servers modal and live favicon | instructions/023-card-polish-servers-modal.md | specs/023-card-polish-servers-modal.md | creates | 2026-10-13 · built |
