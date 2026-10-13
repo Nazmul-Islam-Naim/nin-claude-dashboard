@@ -6,6 +6,8 @@ import DetailHeader from '../components/DetailHeader.jsx'
 import ProgressSummary from '../components/ProgressSummary.jsx'
 import SessionsTable from '../components/SessionsTable.jsx'
 import InsightsSection from '../components/InsightsSection.jsx'
+import ServicesPanel from '../components/ServicesPanel.jsx'
+import PluginsPanel from '../components/PluginsPanel.jsx'
 import RequirementsGrid from '../components/RequirementsGrid.jsx'
 import { reqMessage } from '../components/ReqSummary.jsx'
 import { findProject } from '../lib.js'
@@ -27,6 +29,8 @@ export default function ProjectDetailPage({ name }) {
             <ProgressSummary req={p.requirements} />
             <h2 className="mb-3 mt-8 flex items-center gap-2 text-lg font-semibold">Requirements {p.requirements.source === 'map' && <MapLabel />}</h2>
             {!msg && <RequirementsGrid rows={p.requirements.rows} />}
+            {data.canOpen === true && <ServicesPanel p={p} />}
+            <PluginsPanel name={p.name} canOpen={data.canOpen} />
             <InsightsSection name={p.name} />
             <h2 className="mb-3 mt-8 text-lg font-semibold">Sessions</h2>
             <SessionsTable list={p.sessionList} activeMinutes={data.activeMinutes} />
