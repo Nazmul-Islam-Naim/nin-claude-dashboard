@@ -1,0 +1,30 @@
+{
+  "name": "nin-claude-dashboard-desktop",
+  "productName": "Nin Claude Dashboard",
+  "version": "0.1.0",
+  "description": "Desktop app for Nin Claude Dashboard (Windows, macOS, Linux).",
+  "author": "NazmulIslamNaim",
+  "license": "MIT",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "npm run build && electron .",
+    "dist": "npm run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.nin.claudedashboard",
+    "asar": false,
+    "files": ["main.js", "app/**"],
+    "icon": "icon.png",
+    "directories": { "output": "release" },
+    "win": { "target": "nsis" },
+    "mac": { "target": "dmg", "category": "public.app-category.developer-tools" },
+    "linux": { "target": ["AppImage", "deb"], "category": "Development", "maintainer": "NazmulIslamNaim" }
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "esbuild": "^0.25.0"
+  }
+}
