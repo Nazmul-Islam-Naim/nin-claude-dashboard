@@ -55,6 +55,16 @@ export function detectRun(dir) {
   return subs.flatMap((e) => { const d = path.join(dir, e.name); const cmd = detectOne(d); return cmd ? [{ dir: d, cmd }] : []; });
 }
 
+// A Python project's own venv holds uvicorn, but it is not on PATH: use it when present (the command label stays `uvicorn ...`).
+export function withVenv(cmd, dir) {
+  if (!cmd.startsWith('uvicorn')) return cmd;
+  for (const rel of ['.venv/bin/uvicorn', 'venv/bin/uvicorn', '.venv/Scripts/uvicorn.exe', 'venv/Scripts/uvicorn.exe']) {
+    const bin = path.join(dir, rel);
+    if (fs.existsSync(bin)) return `"${bin}"${cmd.slice('uvicorn'.length)}`;
+  }
+  return cmd;
+}
+
 export const freePort = () => new Promise((resolve, reject) => {
   const srv = net.createServer().unref().once('error', reject).listen(0, () => { const { port } = srv.address(); srv.close(() => resolve(port)); });
 });

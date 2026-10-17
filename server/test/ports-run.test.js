@@ -176,3 +176,26 @@ test('022-4 record kept when ownership matches or cannot be determined', async (
     assert.equal(kept.services(p)[0].state, 'running');
   }
 });
+
+test('uvicorn uses the project venv binary when present', async () => {
+  const { m, spawner } = manager();
+  const p = path.join(tmp(), 'py');
+  fs.mkdirSync(path.join(p, 'app'), { recursive: true });
+  fs.mkdirSync(path.join(p, '.venv', 'bin'), { recursive: true });
+  fs.writeFileSync(path.join(p, 'requirements.txt'), 'fastapi\n');
+  fs.writeFileSync(path.join(p, 'app', 'main.py'), '');
+  fs.writeFileSync(path.join(p, '.venv', 'bin', 'uvicorn'), '');
+  const r = await m.start(p);
+  assert.equal(r.status, 200);
+  assert.equal(spawner.calls[0].cmd, `"${path.join(p, '.venv', 'bin', 'uvicorn')}" app.main:app --reload --port ${r.body.port}`);
+});
+
+test('uvicorn stays bare without a venv', async () => {
+  const { m, spawner } = manager();
+  const p = path.join(tmp(), 'py2');
+  fs.mkdirSync(path.join(p, 'app'), { recursive: true });
+  fs.writeFileSync(path.join(p, 'requirements.txt'), 'fastapi\n');
+  fs.writeFileSync(path.join(p, 'app', 'main.py'), '');
+  await m.start(p);
+  assert.match(spawner.calls[0].cmd, /^uvicorn app\.main:app --reload --port \d+$/);
+});

@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import net from 'node:net';
 import { spawn as realSpawn, execFile } from 'node:child_process';
-import { detectRun, freePort, withPort, waitPort } from './openProject.js';
+import { detectRun, freePort, withPort, withVenv, waitPort } from './openProject.js';
 
 export const dataDir = () => process.env.DASHBOARD_DATA_DIR || path.join(os.homedir(), '.claude-dashboard');
 
@@ -115,7 +115,7 @@ export function createRunManager({ dir = dataDir(), spawner = realSpawn, probe =
       const log = fs.openSync(path.join(dir, 'logs', `${path.basename(projectPath)}-${path.basename(r.dir)}.log`), 'a');
       let child;
       try {
-        child = spawner(withPort(r.cmd, port), [], { cwd: r.dir, shell: true, detached: true, windowsHide: true, stdio: ['ignore', log, log], env: { ...process.env, PORT: String(port) } });
+        child = spawner(withVenv(withPort(r.cmd, port), r.dir), [], { cwd: r.dir, shell: true, detached: true, windowsHide: true, stdio: ['ignore', log, log], env: { ...process.env, PORT: String(port) } });
       } finally { fs.closeSync(log); }
       child.once?.('error', () => forget(projectPath, k));
       child.unref?.();
