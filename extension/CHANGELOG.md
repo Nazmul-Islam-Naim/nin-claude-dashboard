@@ -26,3 +26,7 @@
 ## 0.3.1
 
 - New extension icon and a new overview screenshot.
+
+## 0.3.2
+
+- Fix: FastAPI services now start with the project's own `.venv`/`venv` uvicorn instead of a global one.
