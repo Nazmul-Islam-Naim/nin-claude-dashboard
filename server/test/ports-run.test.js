@@ -126,3 +126,53 @@ test('021-3b start on a port held by a running dashboard service names that proj
   const r = await m.start(b, KEY);
   assert.deepEqual([r.status, r.body.error, r.body.owner], [409, 'port-busy', { project: 'a' }]);
 });
+
+test('022-1 running services survive a dashboard restart and can be stopped', async () => {
+  const { m, dir, killed } = manager();
+  const p = project(tmp(), 'a');
+  const r = await m.start(p, KEY);
+  assert.equal(r.status, 200);
+  const pid = m.services(p)[0].pid;
+  const m2 = createRunManager({ dir, spawner: fakeSpawner(), probe: async () => false, owner: async () => undefined, isAlive: (x) => x === pid, kill: (x) => killed.push(x), wait: async () => false, opener: () => {} });
+  await new Promise((res) => setImmediate(res));
+  assert.deepEqual([m2.services(p)[0].state, m2.services(p)[0].pid], ['running', pid]);
+  assert.equal(m2.stop(p, KEY).status, 200);
+  assert.deepEqual(killed, [pid]);
+  assert.equal(m2.services(p)[0].state, 'stopped');
+});
+
+test('022-2 stale record is dropped when pid is dead or port is free', async () => {
+  const { m, dir } = manager();
+  const p = project(tmp(), 'a');
+  await m.start(p, KEY);
+  const pid = m.services(p)[0].pid;
+  const dead = createRunManager({ dir, spawner: fakeSpawner(), probe: async () => false, isAlive: () => false });
+  assert.equal(dead.services(p)[0].state, 'stopped');
+  const freed = createRunManager({ dir, spawner: fakeSpawner(), probe: async () => true, isAlive: (x) => x === pid });
+  await new Promise((res) => setImmediate(res));
+  assert.equal(freed.services(p)[0].state, 'stopped');
+});
+
+test('022-3 record dropped when the port listener belongs to another process group', async () => {
+  const { m, dir } = manager();
+  const p = project(tmp(), 'a');
+  await m.start(p, KEY);
+  const pid = m.services(p)[0].pid;
+  const adopt = (ownsPortFn) => createRunManager({ dir, spawner: fakeSpawner(), probe: async () => false, ownsPortFn, isAlive: (x) => x === pid });
+  const foreign = adopt(async () => false);
+  await new Promise((res) => setImmediate(res));
+  assert.equal(foreign.services(p)[0].state, 'stopped');
+  assert.equal(JSON.parse(fs.readFileSync(path.join(dir, 'runs.json'), 'utf8'))[p], undefined);
+});
+
+test('022-4 record kept when ownership matches or cannot be determined', async () => {
+  for (const verdict of [true, undefined]) {
+    const { m, dir } = manager();
+    const p = project(tmp(), 'a');
+    await m.start(p, KEY);
+    const pid = m.services(p)[0].pid;
+    const kept = createRunManager({ dir, spawner: fakeSpawner(), probe: async () => false, ownsPortFn: async () => verdict, isAlive: (x) => x === pid });
+    await new Promise((res) => setImmediate(res));
+    assert.equal(kept.services(p)[0].state, 'running');
+  }
+});
